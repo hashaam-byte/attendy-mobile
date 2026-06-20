@@ -261,4 +261,5 @@ The mobile app intentionally keeps settings **read-only** — full settings mana
 
 ## 🇳🇬 Built for Nigerian Schools
 #   a t t e n d y - m o b i l e  
+ #   a t t e n d y - m o b i l e  
  
