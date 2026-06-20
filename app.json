@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Attendy",
+    "slug": "attendy-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#030b05"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.attendy.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#030b05"
+      },
+      "package": "com.attendy.mobile"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Attendy to access your camera for QR scanning."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#030b05"
+        }
+      ],
+      "expo-asset"
+    ]
+  }
+}
