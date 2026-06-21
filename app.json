@@ -14,8 +14,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "monochromeImage": "./assets/adaptive-icon-monochrome.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#030b05"
       },
       "package": "com.attendy.mobile"
     },
