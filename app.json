@@ -7,6 +7,11 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5F7F5"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.attendy.mobile"
@@ -16,7 +21,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#030b05"
       },
-      "package": "com.attendy.mobile"
+      "package": "com.attendy.mobile",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,17 +40,21 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#FFFFFF",
           "image": "./assets/splash-icon.png",
-          "imageWidth": 180,
           "resizeMode": "contain",
+          "backgroundColor": "#F5F7F5",
           "dark": {
             "image": "./assets/splash-icon-dark.png",
-            "backgroundColor": "#101010"
+            "backgroundColor": "#070F08"
           }
         }
       ],
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "29fe69a3-75df-407a-a4d7-b548cf35b573"
+      }
+    }
   }
 }

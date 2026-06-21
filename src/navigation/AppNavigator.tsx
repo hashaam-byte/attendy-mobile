@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,7 +11,7 @@ import * as Font from 'expo-font';
 
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
-import AttendySplash from '../components/AttendySplash';
+import SplashAnimation from '../components/SplashAnimation';
 
 import SlugEntryScreen from '../screens/SlugEntryScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -172,7 +172,7 @@ function RootNavigator() {
   if (loading) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.bg, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color={theme.success} />
+        <ActivityIndicator size="large" color="#16a34a" />
       </View>
     );
   }
@@ -194,7 +194,6 @@ function RootNavigator() {
 
 function ThemedNavigationContainer() {
   const { theme, isDark } = useTheme();
-  const [showSplash, setShowSplash] = useState(true);
   const navTheme = {
     ...(isDark ? DarkTheme : DefaultTheme),
     colors: {
@@ -211,13 +210,13 @@ function ThemedNavigationContainer() {
     <NavigationContainer theme={navTheme}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <RootNavigator />
-      {showSplash && <AttendySplash onFinish={() => setShowSplash(false)} />}
     </NavigationContainer>
   );
 }
 
 export default function AppNavigator() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [showCustomSplash, setShowCustomSplash] = useState(true);
 
   useEffect(() => {
     async function loadResources() {
@@ -232,9 +231,11 @@ export default function AppNavigator() {
     loadResources();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
+  // Hide the native static splash the instant fonts are ready — our animated
+  // component (rendered below, on top of the app) takes over from here.
+  useEffect(() => {
     if (fontsLoaded) {
-      await SplashScreen.hideAsync().catch(() => {});
+      SplashScreen.hideAsync().catch(() => {});
     }
   }, [fontsLoaded]);
 
@@ -243,11 +244,14 @@ export default function AppNavigator() {
   }
 
   return (
-    <SafeAreaProvider onLayout={onLayoutRootView}>
+    <SafeAreaProvider>
       <ThemeProvider>
         <AuthProvider>
           <ThemedNavigationContainer />
         </AuthProvider>
+        {showCustomSplash && (
+          <SplashAnimation onFinish={() => setShowCustomSplash(false)} />
+        )}
       </ThemeProvider>
     </SafeAreaProvider>
   );
