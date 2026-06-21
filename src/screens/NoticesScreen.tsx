@@ -1,194 +1,233 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView,
+  View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl,
+  ActivityIndicator, Modal, TextInput, KeyboardAvoidingView, Platform, Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
-import { AuthState } from '../lib/types';
+import { Notice } from '../lib/types';
+import { formatDateTime, timeAgo } from '../lib/utils';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
 
-export default function LoginScreen({ navigation, route }: any) {
-  const { slug, orgName, primaryColor, industry } = route.params;
-  const { setAuthState } = useAuth();
-  const { theme, isDark, mode, setMode } = useTheme();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPw, setShowPw] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const c = primaryColor || '#16a34a';
+export default function NoticesScreen() {
+  const { authState } = useAuth();
+  const { theme, isDark } = useTheme();
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [composerOpen, setComposerOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [posting, setPosting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const c = authState?.primaryColor || '#16a34a';
+  const isAdmin = authState?.role === 'admin';
 
-  async function handleLogin() {
-    if (!email.trim() || !password) return;
-    setLoading(true); setError(null);
-    try {
-      const { data, error: authErr } = await supabase.auth.signInWithPassword({
-        email: email.trim().toLowerCase(), password,
-      });
-      if (authErr) { setError('Invalid credentials. Check your email and password.'); setLoading(false); return; }
-      const { data: orgUser } = await supabase
-        .from('org_users')
-        .select('role,organisation_id,is_active,organisations(id,name,slug,industry,plan,is_active,primary_color,logo_url,max_members,settings,plan_expires_at)')
-        .eq('user_id', data.user.id).eq('is_active', true).single();
-      if (!orgUser) { await supabase.auth.signOut(); setError('Account not linked to any school.'); setLoading(false); return; }
-      const org: any = Array.isArray(orgUser.organisations) ? orgUser.organisations[0] : orgUser.organisations;
-      if (org?.slug !== slug) { await supabase.auth.signOut(); setError('This account belongs to a different school.'); setLoading(false); return; }
-      if (!org?.is_active) { await supabase.auth.signOut(); setError('School account is suspended.'); setLoading(false); return; }
-      setAuthState({
-        slug: org.slug, orgId: orgUser.organisation_id, orgName: org.name,
-        primaryColor: org.primary_color || '#16a34a', logoUrl: org.logo_url,
-        plan: org.plan, industry: org.industry, role: orgUser.role,
-        userId: data.user.id, email: data.user.email || '',
-        settings: (org.settings as any) || {}, maxMembers: org.max_members || 50,
-      } as AuthState);
-    } catch { setError('Connection error. Try again.'); setLoading(false); }
+  const load = useCallback(async (refresh = false) => {
+    if (!authState) return;
+    if (refresh) setRefreshing(true); else setLoading(true);
+    const { data, error } = await supabase
+      .from('notices')
+      .select('id,organisation_id,title,body,created_by,pinned,created_at')
+      .eq('organisation_id', authState.orgId)
+      .order('pinned', { ascending: false })
+      .order('created_at', { ascending: false });
+    if (!error) setNotices(data ?? []);
+    setLoading(false);
+    setRefreshing(false);
+  }, [authState?.orgId]);
+
+  useEffect(() => { load(); }, [load]);
+
+  async function handlePost() {
+    if (!title.trim() || !body.trim() || !authState) return;
+    setPosting(true);
+    const { error } = await supabase.from('notices').insert({
+      organisation_id: authState.orgId,
+      title: title.trim(),
+      body: body.trim(),
+      created_by: authState.userId,
+      pinned: false,
+    });
+    setPosting(false);
+    if (!error) {
+      setTitle('');
+      setBody('');
+      setComposerOpen(false);
+      load(true);
+    } else {
+      Alert.alert('Could not post notice', error.message);
+    }
   }
 
-  const MODES = [
-    { m: 'light', icon: 'sunny-outline' },
-    { m: 'dark',  icon: 'moon-outline' },
-    { m: 'system',icon: 'phone-portrait-outline' },
-  ] as const;
-  const canSubmit = email.trim().length > 0 && password.length > 0 && !loading;
+  async function togglePin(notice: Notice) {
+    await supabase.from('notices').update({ pinned: !notice.pinned }).eq('id', notice.id);
+    setNotices(prev =>
+      prev
+        .map(n => (n.id === notice.id ? { ...n, pinned: !n.pinned } : n))
+        .sort((a, b) => Number(b.pinned) - Number(a.pinned) || (b.created_at > a.created_at ? 1 : -1))
+    );
+  }
+
+  function confirmDelete(notice: Notice) {
+    Alert.alert('Delete Notice?', `"${notice.title}" will be removed for everyone.`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          setDeletingId(notice.id);
+          await supabase.from('notices').delete().eq('id', notice.id);
+          setNotices(prev => prev.filter(n => n.id !== notice.id));
+          setDeletingId(null);
+        },
+      },
+    ]);
+  }
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: theme.bg, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator color={c} size="large" />
+      </View>
+    );
+  }
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: theme.bg }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {/* Top bar */}
-        <View style={styles.topBar}>
-          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={20} color={theme.textSub} />
-            <Text style={[styles.backText, { color: theme.textSub }]}>Change school</Text>
-          </TouchableOpacity>
-          <View style={styles.themeRow}>
-            {MODES.map(({ m, icon }) => (
-              <TouchableOpacity key={m} onPress={() => setMode(m)}
-                style={[styles.themeBtn, {
-                  backgroundColor: mode === m ? (isDark ? 'rgba(34,197,94,0.15)' : '#E8F5E8') : 'transparent',
-                  borderColor: mode === m ? c + '60' : theme.border,
-                }]}>
-                <Ionicons name={icon} size={14} color={mode === m ? c : theme.textMuted} />
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
-        {/* School pill */}
-        <View style={[styles.schoolPill, { backgroundColor: isDark ? `${c}15` : `${c}10`, borderColor: `${c}30` }]}>
-          <View style={[styles.schoolDot, { backgroundColor: c }]} />
-          <Text style={[styles.schoolPillText, { color: c }]}>{orgName}</Text>
-          <Text style={[styles.schoolPillSlug, { color: theme.textMuted }]}>· {slug}</Text>
-        </View>
-
-        <Text style={[styles.headline, { color: theme.text }]}>Staff Login</Text>
-        <Text style={[styles.sub, { color: theme.textSub }]}>
-          {industry === 'education' ? 'For Admin, Teacher & Gateman accounts' : 'Enter your credentials to continue'}
-        </Text>
-
-        {/* Card */}
-        <View style={[styles.card, { backgroundColor: theme.bgCard, borderColor: theme.border }]}>
-          <View style={[styles.accentBar, { backgroundColor: c }]} />
-          <View style={styles.cardInner}>
-
-            {/* Email */}
-            <View style={styles.field}>
-              <Text style={[styles.label, { color: theme.textMuted }]}>EMAIL ADDRESS</Text>
-              <View style={[styles.inputRow, { backgroundColor: theme.bgInput, borderColor: theme.border }]}>
-                <Ionicons name="mail-outline" size={16} color={theme.textMuted} />
-                <TextInput
-                  style={[styles.input, { color: theme.text }]}
-                  value={email} onChangeText={t => { setEmail(t); setError(null); }}
-                  placeholder={`admin@${slug}.ng`} placeholderTextColor={theme.textMuted}
-                  keyboardType="email-address" autoCapitalize="none" autoCorrect={false} returnKeyType="next"
-                />
-              </View>
-            </View>
-
-            {/* Password */}
-            <View style={styles.field}>
-              <Text style={[styles.label, { color: theme.textMuted }]}>PASSWORD</Text>
-              <View style={[styles.inputRow, { backgroundColor: theme.bgInput, borderColor: theme.border }]}>
-                <Ionicons name="lock-closed-outline" size={16} color={theme.textMuted} />
-                <TextInput
-                  style={[styles.input, { color: theme.text, flex: 1 }]}
-                  value={password} onChangeText={t => { setPassword(t); setError(null); }}
-                  placeholder="••••••••" placeholderTextColor={theme.textMuted}
-                  secureTextEntry={!showPw} returnKeyType="go" onSubmitEditing={handleLogin}
-                />
-                <TouchableOpacity onPress={() => setShowPw(v => !v)} style={{ paddingLeft: 4 }}>
-                  <Ionicons name={showPw ? 'eye-off-outline' : 'eye-outline'} size={16} color={theme.textMuted} />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {error && (
-              <View style={[styles.errorBox, { backgroundColor: theme.dangerBg, borderColor: `${theme.danger}25` }]}>
-                <Ionicons name="alert-circle-outline" size={14} color={theme.danger} />
-                <Text style={[styles.errorText, { color: theme.dangerText }]}>{error}</Text>
+    <View style={{ flex: 1, backgroundColor: theme.bg }}>
+      <FlatList
+        data={notices}
+        keyExtractor={i => i.id}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => load(true)} tintColor={c} />}
+        contentContainerStyle={{ padding: SPACING.lg, paddingBottom: 96, gap: SPACING.md }}
+        renderItem={({ item }) => (
+          <View style={[styles.card, { backgroundColor: theme.bgCard, borderColor: theme.border }]}>
+            {item.pinned && (
+              <View style={[styles.pinBadge, { backgroundColor: theme.warnBg }]}>
+                <Ionicons name="pin" size={11} color={theme.warn} />
+                <Text style={[styles.pinBadgeText, { color: theme.warn }]}>Pinned</Text>
               </View>
             )}
-
-            <TouchableOpacity
-              style={[styles.btn, { backgroundColor: canSubmit ? c : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7E5') }]}
-              onPress={handleLogin} disabled={!canSubmit} activeOpacity={0.8}
-            >
-              {loading ? <ActivityIndicator color="white" size="small" /> : (
-                <>
-                  <Text style={[styles.btnText, { color: canSubmit ? 'white' : theme.textMuted }]}>Sign In</Text>
-                  <Ionicons name="arrow-forward" size={16} color={canSubmit ? 'white' : theme.textMuted} />
-                </>
+            <Text style={[styles.title, { color: theme.text }]}>{item.title}</Text>
+            <Text style={[styles.body, { color: theme.textSub }]}>{item.body}</Text>
+            <View style={styles.footerRow}>
+              <Text style={[styles.time, { color: theme.textMuted }]}>{timeAgo(item.created_at)}</Text>
+              {isAdmin && (
+                <View style={styles.adminActions}>
+                  <TouchableOpacity onPress={() => togglePin(item)} style={styles.iconBtn}>
+                    <Ionicons
+                      name={item.pinned ? 'pin' : 'pin-outline'}
+                      size={16}
+                      color={item.pinned ? theme.warn : theme.textMuted}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => confirmDelete(item)} style={styles.iconBtn} disabled={deletingId === item.id}>
+                    {deletingId === item.id
+                      ? <ActivityIndicator size={14} color={theme.danger} />
+                      : <Ionicons name="trash-outline" size={16} color={theme.danger} />}
+                  </TouchableOpacity>
+                </View>
               )}
-            </TouchableOpacity>
-
-            {/* Role info */}
-            <View style={[styles.roleBox, { backgroundColor: isDark ? `${c}08` : `${c}08`, borderColor: `${c}20` }]}>
-              <Ionicons name="information-circle-outline" size={14} color={theme.textMuted} />
-              <Text style={[styles.roleText, { color: theme.textMuted }]}>
-                For <Text style={{ color: c, fontWeight: '700' }}>Admin</Text>, <Text style={{ color: c, fontWeight: '700' }}>Teacher</Text> & <Text style={{ color: c, fontWeight: '700' }}>Gateman</Text> roles
-              </Text>
             </View>
           </View>
-        </View>
+        )}
+        ListEmptyComponent={
+          <View style={{ alignItems: 'center', padding: 56, gap: 12 }}>
+            <Ionicons name="megaphone-outline" size={40} color={theme.textMuted} />
+            <Text style={[{ fontSize: FONT.lg, fontWeight: '700', color: theme.text }]}>No notices yet</Text>
+            <Text style={[{ fontSize: FONT.sm, color: theme.textMuted, textAlign: 'center' }]}>
+              {isAdmin ? 'Post an announcement for your school using the button below.' : 'Check back later for school announcements.'}
+            </Text>
+          </View>
+        }
+      />
 
-        <TouchableOpacity onPress={() => navigation.navigate('ParentLogin')} style={styles.parentLink}>
-          <Text style={[styles.parentLinkText, { color: theme.textMuted }]}>
-            Parent? <Text style={{ color: c, fontWeight: '700' }}>Use Parent Portal →</Text>
-          </Text>
+      {isAdmin && (
+        <TouchableOpacity
+          style={[styles.fab, { backgroundColor: c }]}
+          onPress={() => setComposerOpen(true)}
+          activeOpacity={0.85}
+        >
+          <Ionicons name="add" size={26} color="white" />
         </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      )}
+
+      <Modal visible={composerOpen} animationType="slide" transparent onRequestClose={() => setComposerOpen(false)}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalWrap}
+        >
+          <View style={[styles.modalCard, { backgroundColor: theme.bgCard }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>New Notice</Text>
+              <TouchableOpacity onPress={() => setComposerOpen(false)}>
+                <Ionicons name="close" size={22} color={theme.textMuted} />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={[styles.label, { color: theme.textMuted }]}>TITLE</Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: theme.bgInput, borderColor: theme.border, color: theme.text }]}
+              value={title}
+              onChangeText={setTitle}
+              placeholder="e.g. Mid-term break schedule"
+              placeholderTextColor={theme.textMuted}
+            />
+
+            <Text style={[styles.label, { color: theme.textMuted }]}>MESSAGE</Text>
+            <TextInput
+              style={[styles.input, styles.textArea, { backgroundColor: theme.bgInput, borderColor: theme.border, color: theme.text }]}
+              value={body}
+              onChangeText={setBody}
+              placeholder="Write the announcement…"
+              placeholderTextColor={theme.textMuted}
+              multiline
+              numberOfLines={5}
+              textAlignVertical="top"
+            />
+
+            <TouchableOpacity
+              style={[styles.postBtn, { backgroundColor: !title.trim() || !body.trim() || posting ? (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7E5') : c }]}
+              onPress={handlePost}
+              disabled={!title.trim() || !body.trim() || posting}
+              activeOpacity={0.8}
+            >
+              {posting
+                ? <ActivityIndicator color="white" size="small" />
+                : <Text style={styles.postBtnText}>Post Notice</Text>}
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: { flexGrow: 1, padding: SPACING.xl, paddingTop: 56 },
-  topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: SPACING.xxl },
-  backBtn: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  backText: { fontSize: FONT.sm, fontWeight: '500' },
-  themeRow: { flexDirection: 'row', gap: 4 },
-  themeBtn: { width: 30, height: 30, borderRadius: RADIUS.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  schoolPill: { flexDirection: 'row', alignItems: 'center', gap: 7, alignSelf: 'flex-start', borderWidth: 1, borderRadius: RADIUS.full, paddingHorizontal: 12, paddingVertical: 5, marginBottom: 20 },
-  schoolDot: { width: 7, height: 7, borderRadius: 4 },
-  schoolPillText: { fontSize: FONT.sm, fontWeight: '700' },
-  schoolPillSlug: { fontSize: FONT.sm },
-  headline: { fontSize: 26, fontWeight: '800', letterSpacing: -0.5, marginBottom: 5 },
-  sub: { fontSize: FONT.base, lineHeight: 20, marginBottom: 24 },
-  card: { borderWidth: 1, borderRadius: RADIUS.xxl, overflow: 'hidden', marginBottom: 24 },
-  accentBar: { height: 3 },
-  cardInner: { padding: SPACING.xl, gap: 4 },
-  field: { marginBottom: 14 },
-  label: { fontSize: FONT.xs, fontWeight: '700', letterSpacing: 1.1, marginBottom: 7 },
-  inputRow: { flexDirection: 'row', alignItems: 'center', gap: 10, borderWidth: 1.5, borderRadius: RADIUS.lg, paddingHorizontal: 14, height: 50 },
-  input: { flex: 1, fontSize: FONT.base },
-  errorBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, borderWidth: 1, borderRadius: RADIUS.md, padding: 10, marginBottom: 10 },
-  errorText: { flex: 1, fontSize: FONT.sm, lineHeight: 17 },
-  btn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, height: 50, borderRadius: RADIUS.lg, marginTop: 6 },
-  btnText: { fontSize: FONT.md, fontWeight: '700' },
-  roleBox: { flexDirection: 'row', alignItems: 'center', gap: 7, borderWidth: 1, borderRadius: RADIUS.md, padding: 10, marginTop: 8 },
-  roleText: { flex: 1, fontSize: FONT.sm, lineHeight: 18 },
-  parentLink: { alignItems: 'center', marginTop: 8 },
-  parentLinkText: { fontSize: FONT.sm },
+  card: { borderWidth: 1, borderRadius: RADIUS.xl, padding: SPACING.lg, gap: 8 },
+  pinBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.sm },
+  pinBadgeText: { fontSize: FONT.xs, fontWeight: '700' },
+  title: { fontSize: FONT.lg, fontWeight: '700' },
+  body: { fontSize: FONT.base, lineHeight: 20 },
+  footerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 },
+  time: { fontSize: FONT.xs },
+  adminActions: { flexDirection: 'row', gap: 4 },
+  iconBtn: { padding: 6 },
+  fab: {
+    position: 'absolute', right: SPACING.lg, bottom: SPACING.xl,
+    width: 56, height: 56, borderRadius: 28,
+    alignItems: 'center', justifyContent: 'center',
+    shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 8, shadowOffset: { width: 0, height: 4 }, elevation: 6,
+  },
+  modalWrap: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' },
+  modalCard: { borderTopLeftRadius: RADIUS.xxl, borderTopRightRadius: RADIUS.xxl, padding: SPACING.xl, gap: 4 },
+  modalHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: SPACING.md },
+  modalTitle: { fontSize: FONT.xl, fontWeight: '800' },
+  label: { fontSize: FONT.xs, fontWeight: '700', letterSpacing: 1.1, marginBottom: 8, marginTop: SPACING.md },
+  input: { borderWidth: 1, borderRadius: RADIUS.lg, paddingHorizontal: 14, height: 48, fontSize: FONT.base },
+  textArea: { height: 120, paddingTop: 12 },
+  postBtn: { height: 52, borderRadius: RADIUS.xl, alignItems: 'center', justifyContent: 'center', marginTop: SPACING.xl },
+  postBtnText: { color: 'white', fontWeight: '700', fontSize: FONT.md },
 });

@@ -71,6 +71,16 @@ export interface NotificationLog {
   members?: { full_name: string } | null;
 }
 
+export interface Notice {
+  id: string;
+  organisation_id: string;
+  title: string;
+  body: string;
+  created_by: string | null;
+  pinned: boolean;
+  created_at: string;
+}
+
 export interface AuthState {
   slug: string;
   orgId: string;

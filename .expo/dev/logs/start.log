@@ -16522,3 +16522,502 @@
 {"_e":"metro:config","_t":1781974415176,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
 {"_e":"metro:server_log","_t":1781974605111,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
 {"_e":"metro:instantiate","_t":1781974614996,"atlas":false,"workers":6,"host":"::","port":8081}
+{"_e":"root:init","_t":1782050876202,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782050876205,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782050876263,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782050880742,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782050901484,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:server_log","_t":1782050943205,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
+{"_e":"root:init","_t":1782051072902,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782051072921,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782051073003,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782051086812,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782051111574,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:instantiate","_t":1782051143385,"atlas":false,"workers":6,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1782051255761,"id":"4","platform":"android","environment":null,"entry":"index.ts"}
+{"_e":"metro:bundling:progress","_t":1782051255762,"id":"4","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782051255783,"id":"4","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782051312940,"id":"4","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1782051313041,"id":"4","progress":0.010000000000000002,"total":3,"current":1}
+{"_e":"metro:bundling:progress","_t":1782051313073,"id":"4","progress":0.04000000000000001,"total":3,"current":2}
+{"_e":"metro:bundling:progress","_t":1782051313173,"id":"4","progress":0.04000000000000001,"total":4,"current":2}
+{"_e":"metro:bundling:progress","_t":1782051313227,"id":"4","progress":0.09,"total":4,"current":3}
+{"_e":"metro:bundling:progress","_t":1782051313342,"id":"4","progress":0.09,"total":5,"current":3}
+{"_e":"metro:bundling:progress","_t":1782051313445,"id":"4","progress":0.09,"total":32,"current":3}
+{"_e":"metro:bundling:progress","_t":1782051313607,"id":"4","progress":0.09,"total":32,"current":4}
+{"_e":"metro:bundling:progress","_t":1782051313709,"id":"4","progress":0.09,"total":35,"current":4}
+{"_e":"metro:bundling:progress","_t":1782051313758,"id":"4","progress":0.09,"total":35,"current":5}
+{"_e":"metro:bundling:progress","_t":1782051313863,"id":"4","progress":0.09,"total":55,"current":6}
+{"_e":"metro:bundling:progress","_t":1782051313987,"id":"4","progress":0.09,"total":58,"current":8}
+{"_e":"metro:bundling:progress","_t":1782051314090,"id":"4","progress":0.09,"total":58,"current":9}
+{"_e":"metro:bundling:progress","_t":1782051314193,"id":"4","progress":0.09,"total":59,"current":9}
+{"_e":"metro:bundling:progress","_t":1782051314322,"id":"4","progress":0.09,"total":59,"current":10}
+{"_e":"metro:bundling:progress","_t":1782051314422,"id":"4","progress":0.09,"total":60,"current":10}
+{"_e":"metro:bundling:progress","_t":1782051314486,"id":"4","progress":0.09,"total":60,"current":11}
+{"_e":"metro:bundling:progress","_t":1782051314594,"id":"4","progress":0.09,"total":65,"current":12}
+{"_e":"metro:bundling:progress","_t":1782051314709,"id":"4","progress":0.09,"total":65,"current":13}
+{"_e":"metro:bundling:progress","_t":1782051315072,"id":"4","progress":0.09,"total":65,"current":14}
+{"_e":"metro:bundling:progress","_t":1782051315234,"id":"4","progress":0.09,"total":65,"current":15}
+{"_e":"metro:bundling:progress","_t":1782051315379,"id":"4","progress":0.09,"total":65,"current":16}
+{"_e":"metro:bundling:progress","_t":1782051315485,"id":"4","progress":0.09,"total":68,"current":18}
+{"_e":"metro:bundling:progress","_t":1782051315589,"id":"4","progress":0.09,"total":72,"current":19}
+{"_e":"metro:bundling:progress","_t":1782051315725,"id":"4","progress":0.09,"total":72,"current":20}
+{"_e":"metro:bundling:progress","_t":1782051315826,"id":"4","progress":0.09,"total":73,"current":20}
+{"_e":"metro:bundling:progress","_t":1782051315919,"id":"4","progress":0.09,"total":73,"current":21}
+{"_e":"metro:bundling:progress","_t":1782051316065,"id":"4","progress":0.09,"total":74,"current":21}
+{"_e":"metro:bundling:progress","_t":1782051316168,"id":"4","progress":0.09,"total":75,"current":22}
+{"_e":"metro:bundling:progress","_t":1782051316303,"id":"4","progress":0.09631391200951249,"total":87,"current":27}
+{"_e":"metro:bundling:progress","_t":1782051316466,"id":"4","progress":0.10358039371119038,"total":87,"current":28}
+{"_e":"metro:bundling:progress","_t":1782051316573,"id":"4","progress":0.10358039371119038,"total":106,"current":31}
+{"_e":"metro:bundling:progress","_t":1782051316706,"id":"4","progress":0.10358039371119038,"total":107,"current":32}
+{"_e":"metro:bundling:progress","_t":1782051316807,"id":"4","progress":0.10358039371119038,"total":204,"current":36}
+{"_e":"metro:bundling:progress","_t":1782051316912,"id":"4","progress":0.10358039371119038,"total":212,"current":41}
+{"_e":"metro:bundling:progress","_t":1782051317030,"id":"4","progress":0.10358039371119038,"total":212,"current":42}
+{"_e":"metro:bundling:progress","_t":1782051317190,"id":"4","progress":0.10358039371119038,"total":222,"current":47}
+{"_e":"metro:bundling:progress","_t":1782051317294,"id":"4","progress":0.10358039371119038,"total":242,"current":52}
+{"_e":"metro:bundling:progress","_t":1782051317589,"id":"4","progress":0.10358039371119038,"total":245,"current":53}
+{"_e":"metro:bundling:progress","_t":1782051317698,"id":"4","progress":0.10358039371119038,"total":284,"current":68}
+{"_e":"metro:bundling:progress","_t":1782051317799,"id":"4","progress":0.10358039371119038,"total":286,"current":74}
+{"_e":"metro:bundling:progress","_t":1782051317901,"id":"4","progress":0.10358039371119038,"total":291,"current":79}
+{"_e":"metro:bundling:progress","_t":1782051318003,"id":"4","progress":0.10358039371119038,"total":291,"current":80}
+{"_e":"metro:bundling:progress","_t":1782051318032,"id":"4","progress":0.10358039371119038,"total":291,"current":81}
+{"_e":"metro:bundling:progress","_t":1782051318255,"id":"4","progress":0.10358039371119038,"total":291,"current":82}
+{"_e":"metro:bundling:progress","_t":1782051318362,"id":"4","progress":0.10358039371119038,"total":297,"current":85}
+{"_e":"metro:bundling:progress","_t":1782051318608,"id":"4","progress":0.10358039371119038,"total":299,"current":87}
+{"_e":"metro:bundling:progress","_t":1782051318721,"id":"4","progress":0.10358039371119038,"total":334,"current":89}
+{"_e":"metro:bundling:progress","_t":1782051318830,"id":"4","progress":0.10358039371119038,"total":336,"current":93}
+{"_e":"metro:bundling:progress","_t":1782051318956,"id":"4","progress":0.10358039371119038,"total":341,"current":97}
+{"_e":"metro:bundling:progress","_t":1782051319175,"id":"4","progress":0.10358039371119038,"total":585,"current":98}
+{"_e":"metro:bundling:progress","_t":1782051319187,"id":"4","progress":0.10358039371119038,"total":585,"current":99}
+{"_e":"metro:bundling:progress","_t":1782051319290,"id":"4","progress":0.10358039371119038,"total":586,"current":104}
+{"_e":"metro:bundling:progress","_t":1782051319357,"id":"4","progress":0.10358039371119038,"total":586,"current":105}
+{"_e":"metro:bundling:progress","_t":1782051319540,"id":"4","progress":0.10358039371119038,"total":587,"current":111}
+{"_e":"metro:bundling:progress","_t":1782051319698,"id":"4","progress":0.10358039371119038,"total":587,"current":112}
+{"_e":"metro:bundling:progress","_t":1782051319800,"id":"4","progress":0.10358039371119038,"total":596,"current":116}
+{"_e":"metro:bundling:progress","_t":1782051319912,"id":"4","progress":0.10358039371119038,"total":609,"current":120}
+{"_e":"metro:bundling:progress","_t":1782051320050,"id":"4","progress":0.10358039371119038,"total":610,"current":120}
+{"_e":"metro:bundling:progress","_t":1782051320188,"id":"4","progress":0.10358039371119038,"total":616,"current":128}
+{"_e":"metro:bundling:progress","_t":1782051320484,"id":"4","progress":0.10358039371119038,"total":630,"current":132}
+{"_e":"metro:bundling:progress","_t":1782051320584,"id":"4","progress":0.10358039371119038,"total":640,"current":139}
+{"_e":"metro:bundling:progress","_t":1782051320694,"id":"4","progress":0.10358039371119038,"total":643,"current":144}
+{"_e":"metro:bundling:progress","_t":1782051320801,"id":"4","progress":0.10358039371119038,"total":655,"current":155}
+{"_e":"metro:bundling:progress","_t":1782051320902,"id":"4","progress":0.10358039371119038,"total":662,"current":162}
+{"_e":"metro:bundling:progress","_t":1782051321011,"id":"4","progress":0.10358039371119038,"total":672,"current":170}
+{"_e":"metro:bundling:progress","_t":1782051321144,"id":"4","progress":0.10358039371119038,"total":675,"current":175}
+{"_e":"metro:bundling:progress","_t":1782051321373,"id":"4","progress":0.10358039371119038,"total":683,"current":182}
+{"_e":"metro:bundling:progress","_t":1782051321375,"id":"4","progress":0.10358039371119038,"total":683,"current":183}
+{"_e":"metro:bundling:progress","_t":1782051321484,"id":"4","progress":0.10358039371119038,"total":717,"current":190}
+{"_e":"metro:bundling:progress","_t":1782051321592,"id":"4","progress":0.10358039371119038,"total":721,"current":201}
+{"_e":"metro:bundling:progress","_t":1782051323892,"id":"4","progress":0.10358039371119038,"total":721,"current":202}
+{"_e":"metro:bundling:progress","_t":1782051324065,"id":"4","progress":0.10358039371119038,"total":722,"current":212}
+{"_e":"metro:bundling:progress","_t":1782051324167,"id":"4","progress":0.10358039371119038,"total":723,"current":225}
+{"_e":"metro:bundling:progress","_t":1782051324272,"id":"4","progress":0.10358039371119038,"total":738,"current":231}
+{"_e":"metro:bundling:progress","_t":1782051324427,"id":"4","progress":0.10358039371119038,"total":738,"current":235}
+{"_e":"metro:bundling:progress","_t":1782051324458,"id":"4","progress":0.10358039371119038,"total":738,"current":236}
+{"_e":"metro:bundling:progress","_t":1782051324560,"id":"4","progress":0.1054711318553947,"total":739,"current":240}
+{"_e":"metro:bundling:progress","_t":1782051324663,"id":"4","progress":0.10816008464640109,"total":748,"current":246}
+{"_e":"metro:bundling:progress","_t":1782051324688,"id":"4","progress":0.10904122222539964,"total":748,"current":247}
+{"_e":"metro:bundling:progress","_t":1782051324791,"id":"4","progress":0.11377236079617034,"total":756,"current":255}
+{"_e":"metro:bundling:progress","_t":1782051324893,"id":"4","progress":0.12527873961218836,"total":760,"current":269}
+{"_e":"metro:bundling:progress","_t":1782051324996,"id":"4","progress":0.13179849837418345,"total":763,"current":277}
+{"_e":"metro:bundling:progress","_t":1782051325112,"id":"4","progress":0.14441971532919162,"total":771,"current":293}
+{"_e":"metro:bundling:progress","_t":1782051325231,"id":"4","progress":0.14503073908024378,"total":772,"current":294}
+{"_e":"metro:bundling:progress","_t":1782051325377,"id":"4","progress":0.15084453694068678,"total":775,"current":301}
+{"_e":"metro:bundling:progress","_t":1782051325557,"id":"4","progress":0.15579097684817816,"total":793,"current":313}
+{"_e":"metro:bundling:progress","_t":1782051325671,"id":"4","progress":0.16079800374994765,"total":803,"current":322}
+{"_e":"metro:bundling:progress","_t":1782051325789,"id":"4","progress":0.1694304341913669,"total":809,"current":333}
+{"_e":"metro:bundling:progress","_t":1782051325892,"id":"4","progress":0.18352232891327544,"total":810,"current":347}
+{"_e":"metro:bundling:progress","_t":1782051326059,"id":"4","progress":0.18852472657567904,"total":813,"current":353}
+{"_e":"metro:bundling:progress","_t":1782051326161,"id":"4","progress":0.2097023506841716,"total":832,"current":381}
+{"_e":"metro:bundling:progress","_t":1782051326263,"id":"4","progress":0.22998480260724855,"total":832,"current":399}
+{"_e":"metro:bundling:progress","_t":1782051326363,"id":"4","progress":0.2523923308707515,"total":838,"current":421}
+{"_e":"metro:bundling:progress","_t":1782051326466,"id":"4","progress":0.28198888135747685,"total":838,"current":445}
+{"_e":"metro:bundling:progress","_t":1782051326567,"id":"4","progress":0.3172458575651768,"total":838,"current":472}
+{"_e":"metro:bundling:progress","_t":1782051326672,"id":"4","progress":0.346680948572354,"total":839,"current":494}
+{"_e":"metro:bundling:progress","_t":1782051326781,"id":"4","progress":0.3802777777777778,"total":840,"current":518}
+{"_e":"metro:bundling:progress","_t":1782051326881,"id":"4","progress":0.41588712543937356,"total":842,"current":543}
+{"_e":"metro:bundling:progress","_t":1782051326983,"id":"4","progress":0.4502696892931094,"total":842,"current":565}
+{"_e":"metro:bundling:progress","_t":1782051327085,"id":"4","progress":0.4880161963683919,"total":846,"current":591}
+{"_e":"metro:bundling:progress","_t":1782051327185,"id":"4","progress":0.4935712984396433,"total":864,"current":607}
+{"_e":"metro:bundling:progress","_t":1782051327286,"id":"4","progress":0.5123029649089885,"total":876,"current":627}
+{"_e":"metro:bundling:progress","_t":1782051327390,"id":"4","progress":0.5161499328984738,"total":895,"current":643}
+{"_e":"metro:bundling:progress","_t":1782051327491,"id":"4","progress":0.529945516117138,"total":908,"current":661}
+{"_e":"metro:bundling:progress","_t":1782051327595,"id":"4","progress":0.529945516117138,"total":940,"current":679}
+{"_e":"metro:bundling:progress","_t":1782051327754,"id":"4","progress":0.529945516117138,"total":941,"current":679}
+{"_e":"metro:bundling:progress","_t":1782051327856,"id":"4","progress":0.529945516117138,"total":963,"current":693}
+{"_e":"metro:bundling:progress","_t":1782051327956,"id":"4","progress":0.529945516117138,"total":965,"current":696}
+{"_e":"metro:bundling:progress","_t":1782051328057,"id":"4","progress":0.529945516117138,"total":965,"current":698}
+{"_e":"metro:bundling:progress","_t":1782051328161,"id":"4","progress":0.529945516117138,"total":966,"current":701}
+{"_e":"metro:cache_write_error","_t":1782051328225,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051328225,"id":"4","progress":0.529945516117138,"total":966,"current":701}
+{"_e":"metro:cache_write_error","_t":1782051328226,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051328226,"id":"4","progress":0.529945516117138,"total":966,"current":701}
+{"_e":"metro:cache_write_error","_t":1782051328227,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051328227,"id":"4","progress":0.529945516117138,"total":966,"current":701}
+{"_e":"metro:cache_write_error","_t":1782051328230,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051328230,"id":"4","progress":0.529945516117138,"total":966,"current":701}
+{"_e":"metro:cache_write_error","_t":1782051328230,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051328230,"id":"4","progress":0.529945516117138,"total":966,"current":701}
+{"_e":"metro:bundling:progress","_t":1782051328264,"id":"4","progress":0.5386891366502492,"total":966,"current":709}
+{"_e":"metro:cache_write_error","_t":1782051328290,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051328290,"id":"4","progress":0.5386891366502492,"total":966,"current":709}
+{"_e":"metro:bundling:progress","_t":1782051328365,"id":"4","progress":0.5417325720458316,"total":966,"current":711}
+{"_e":"metro:bundling:progress","_t":1782051328465,"id":"4","progress":0.5463800616431077,"total":970,"current":717}
+{"_e":"metro:bundling:progress","_t":1782051328566,"id":"4","progress":0.5463800616431077,"total":978,"current":720}
+{"_e":"metro:bundling:progress","_t":1782051328666,"id":"4","progress":0.5463800616431077,"total":981,"current":725}
+{"_e":"metro:bundling:progress","_t":1782051328767,"id":"4","progress":0.5463800616431077,"total":995,"current":733}
+{"_e":"metro:bundling:progress","_t":1782051328868,"id":"4","progress":0.5463800616431077,"total":999,"current":735}
+{"_e":"metro:bundling:progress","_t":1782051328976,"id":"4","progress":0.5463800616431077,"total":1000,"current":737}
+{"_e":"metro:bundling:progress","_t":1782051329077,"id":"4","progress":0.5463800616431077,"total":1082,"current":757}
+{"_e":"metro:bundling:progress","_t":1782051329199,"id":"4","progress":0.5463800616431077,"total":1096,"current":762}
+{"_e":"metro:bundling:progress","_t":1782051329302,"id":"4","progress":0.5463800616431077,"total":1102,"current":770}
+{"_e":"metro:bundling:progress","_t":1782051329402,"id":"4","progress":0.5463800616431077,"total":1116,"current":779}
+{"_e":"metro:bundling:progress","_t":1782051329536,"id":"4","progress":0.5463800616431077,"total":1116,"current":782}
+{"_e":"metro:bundling:progress","_t":1782051329639,"id":"4","progress":0.5463800616431077,"total":1123,"current":796}
+{"_e":"metro:bundling:progress","_t":1782051329745,"id":"4","progress":0.5463800616431077,"total":1127,"current":801}
+{"_e":"metro:bundling:progress","_t":1782051329858,"id":"4","progress":0.5463800616431077,"total":1128,"current":805}
+{"_e":"metro:bundling:progress","_t":1782051329964,"id":"4","progress":0.5463800616431077,"total":1132,"current":824}
+{"_e":"metro:bundling:progress","_t":1782051330085,"id":"4","progress":0.5463800616431077,"total":1132,"current":825}
+{"_e":"metro:bundling:progress","_t":1782051330187,"id":"4","progress":0.5463800616431077,"total":1166,"current":843}
+{"_e":"metro:bundling:progress","_t":1782051330294,"id":"4","progress":0.5463800616431077,"total":1167,"current":849}
+{"_e":"metro:bundling:progress","_t":1782051330572,"id":"4","progress":0.5463800616431077,"total":1175,"current":856}
+{"_e":"metro:bundling:progress","_t":1782051330750,"id":"4","progress":0.5463800616431077,"total":1193,"current":864}
+{"_e":"metro:bundling:progress","_t":1782051330924,"id":"4","progress":0.5463800616431077,"total":1193,"current":869}
+{"_e":"metro:bundling:progress","_t":1782051330926,"id":"4","progress":0.5463800616431077,"total":1193,"current":870}
+{"_e":"metro:bundling:progress","_t":1782051331026,"id":"4","progress":0.5537549915549043,"total":1196,"current":890}
+{"_e":"metro:bundling:progress","_t":1782051331126,"id":"4","progress":0.5696924217580184,"total":1203,"current":908}
+{"_e":"metro:bundling:progress","_t":1782051331231,"id":"4","progress":0.5816435667429968,"total":1205,"current":919}
+{"_e":"metro:bundling:progress","_t":1782051331440,"id":"4","progress":0.5870151728917601,"total":1206,"current":924}
+{"_e":"metro:bundling:progress","_t":1782051331543,"id":"4","progress":0.5925950887167925,"total":1212,"current":933}
+{"_e":"metro:bundling:progress","_t":1782051332146,"id":"4","progress":0.6075015664956224,"total":1215,"current":947}
+{"_e":"metro:bundling:progress","_t":1782051332326,"id":"4","progress":0.6163344798416648,"total":1219,"current":957}
+{"_e":"metro:bundling:progress","_t":1782051332556,"id":"4","progress":0.6277614460908361,"total":1223,"current":969}
+{"_e":"metro:bundling:progress","_t":1782051332657,"id":"4","progress":0.654700095005176,"total":1226,"current":992}
+{"_e":"metro:bundling:progress","_t":1782051332758,"id":"4","progress":0.6743651878384181,"total":1236,"current":1015}
+{"_e":"metro:bundling:progress","_t":1782051332859,"id":"4","progress":0.6890871302584528,"total":1242,"current":1031}
+{"_e":"metro:bundling:progress","_t":1782051333000,"id":"4","progress":0.7081432368811603,"total":1243,"current":1046}
+{"_e":"metro:bundling:progress","_t":1782051333100,"id":"4","progress":0.7203816836877018,"total":1243,"current":1055}
+{"_e":"metro:bundling:progress","_t":1782051333211,"id":"4","progress":0.7354821756462093,"total":1243,"current":1066}
+{"_e":"metro:bundling:progress","_t":1782051333318,"id":"4","progress":0.7563261747685672,"total":1243,"current":1081}
+{"_e":"metro:bundling:progress","_t":1782051333441,"id":"4","progress":0.7607092823688755,"total":1244,"current":1085}
+{"_e":"metro:bundling:progress","_t":1782051333541,"id":"4","progress":0.7722681359044995,"total":1254,"current":1102}
+{"_e":"metro:bundling:progress","_t":1782051333642,"id":"4","progress":0.7740076930098585,"total":1256,"current":1105}
+{"_e":"metro:bundling:progress","_t":1782051333749,"id":"4","progress":0.7787116242009083,"total":1259,"current":1111}
+{"_e":"metro:server_log","_t":1782051333796,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
+{"_e":"metro:bundling:progress","_t":1782051333800,"id":"4","progress":0.7787116242009083,"total":1259,"current":1111}
+{"_e":"metro:bundling:progress","_t":1782051333848,"id":"4","progress":0.7826518821330258,"total":1266,"current":1120}
+{"_e":"metro:bundling:progress","_t":1782051333948,"id":"4","progress":0.793872554524831,"total":1266,"current":1128}
+{"_e":"metro:bundling:progress","_t":1782051334048,"id":"4","progress":0.8025465911258094,"total":1277,"current":1144}
+{"_e":"metro:bundling:progress","_t":1782051334152,"id":"4","progress":0.8123980134038212,"total":1277,"current":1151}
+{"_e":"metro:bundling:progress","_t":1782051334252,"id":"4","progress":0.8317326355528383,"total":1284,"current":1171}
+{"_e":"metro:bundling:progress","_t":1782051334358,"id":"4","progress":0.8422938981812447,"total":1289,"current":1183}
+{"_e":"metro:bundling:progress","_t":1782051334459,"id":"4","progress":0.8594685231182754,"total":1289,"current":1195}
+{"_e":"metro:bundling:progress","_t":1782051334567,"id":"4","progress":0.8594685231182754,"total":1300,"current":1205}
+{"_e":"metro:bundling:progress","_t":1782051334673,"id":"4","progress":0.8680575965847749,"total":1303,"current":1214}
+{"_e":"metro:bundling:progress","_t":1782051334840,"id":"4","progress":0.8737873341465383,"total":1303,"current":1218}
+{"_e":"metro:bundling:progress","_t":1782051334941,"id":"4","progress":0.8737873341465383,"total":1310,"current":1224}
+{"_e":"metro:bundling:progress","_t":1782051335055,"id":"4","progress":0.8737873341465383,"total":1312,"current":1226}
+{"_e":"metro:bundling:progress","_t":1782051335157,"id":"4","progress":0.8777481241596669,"total":1315,"current":1232}
+{"_e":"metro:bundling:progress","_t":1782051335260,"id":"4","progress":0.880600268906591,"total":1315,"current":1234}
+{"_e":"metro:bundling:progress","_t":1782051335420,"id":"4","progress":0.88362854996486,"total":1317,"current":1238}
+{"_e":"metro:bundling:progress","_t":1782051335523,"id":"4","progress":0.88362854996486,"total":1329,"current":1246}
+{"_e":"metro:bundling:progress","_t":1782051336872,"id":"4","progress":0.88362854996486,"total":1334,"current":1249}
+{"_e":"metro:bundling:progress","_t":1782051338405,"id":"4","progress":0.88362854996486,"total":1335,"current":1252}
+{"_e":"metro:bundling:progress","_t":1782051339650,"id":"4","progress":0.88362854996486,"total":1338,"current":1254}
+{"_e":"metro:bundling:progress","_t":1782051339752,"id":"4","progress":0.88362854996486,"total":1340,"current":1256}
+{"_e":"metro:bundling:progress","_t":1782051340361,"id":"4","progress":0.88362854996486,"total":1340,"current":1257}
+{"_e":"metro:bundling:progress","_t":1782051341127,"id":"4","progress":0.88362854996486,"total":1341,"current":1258}
+{"_e":"metro:bundling:progress","_t":1782051341227,"id":"4","progress":0.8917416084245614,"total":1347,"current":1272}
+{"_e":"metro:bundling:progress","_t":1782051341328,"id":"4","progress":0.8977282176744511,"total":1352,"current":1281}
+{"_e":"metro:bundling:progress","_t":1782051341437,"id":"4","progress":0.8977282176744511,"total":1370,"current":1289}
+{"_e":"metro:bundling:progress","_t":1782051341537,"id":"4","progress":0.8977282176744511,"total":1376,"current":1299}
+{"_e":"metro:bundling:progress","_t":1782051341646,"id":"4","progress":0.8983025713055199,"total":1379,"current":1307}
+{"_e":"metro:bundling:progress","_t":1782051341761,"id":"4","progress":0.9024311108142915,"total":1379,"current":1310}
+{"_e":"metro:bundling:progress","_t":1782051341919,"id":"4","progress":0.903809394096993,"total":1379,"current":1311}
+{"_e":"metro:bundling:progress","_t":1782051342141,"id":"4","progress":0.905188729102917,"total":1379,"current":1312}
+{"_e":"metro:bundling:progress","_t":1782051342244,"id":"4","progress":0.9121011799808693,"total":1379,"current":1317}
+{"_e":"metro:bundling:progress","_t":1782051342347,"id":"4","progress":0.9177084646082755,"total":1380,"current":1322}
+{"_e":"metro:bundling:progress","_t":1782051343949,"id":"4","progress":0.9177084646082755,"total":1383,"current":1323}
+{"_e":"metro:bundling:progress","_t":1782051344049,"id":"4","progress":0.922374244617666,"total":1389,"current":1334}
+{"_e":"metro:bundling:progress","_t":1782051344166,"id":"4","progress":0.9237576328666924,"total":1389,"current":1335}
+{"_e":"metro:bundling:progress","_t":1782051344277,"id":"4","progress":0.9237576328666924,"total":1395,"current":1339}
+{"_e":"metro:bundling:progress","_t":1782051344409,"id":"4","progress":0.9237576328666924,"total":1403,"current":1340}
+{"_e":"metro:bundling:progress","_t":1782051344796,"id":"4","progress":0.9237576328666924,"total":1403,"current":1341}
+{"_e":"metro:bundling:progress","_t":1782051344896,"id":"4","progress":0.9237576328666924,"total":1405,"current":1350}
+{"_e":"metro:bundling:progress","_t":1782051345371,"id":"4","progress":0.9346267572806988,"total":1414,"current":1367}
+{"_e":"metro:bundling:progress","_t":1782051346437,"id":"4","progress":0.9347175340738613,"total":1416,"current":1369}
+{"_e":"metro:bundling:progress","_t":1782051346619,"id":"4","progress":0.9415983652482781,"total":1417,"current":1375}
+{"_e":"metro:bundling:progress","_t":1782051347194,"id":"4","progress":0.9526200512850098,"total":1418,"current":1384}
+{"_e":"metro:bundling:progress","_t":1782051348355,"id":"4","progress":0.962542369889132,"total":1428,"current":1401}
+{"_e":"metro:bundling:progress","_t":1782051350346,"id":"4","progress":0.9625683323694285,"total":1429,"current":1402}
+{"_e":"metro:bundling:progress","_t":1782051350497,"id":"4","progress":0.9736031101765368,"total":1430,"current":1411}
+{"_e":"metro:bundling:progress","_t":1782051350785,"id":"4","progress":0.9749836177808205,"total":1430,"current":1412}
+{"_e":"metro:bundling:progress","_t":1782051350891,"id":"4","progress":0.9888657791690142,"total":1433,"current":1425}
+{"_e":"metro:bundling:progress","_t":1782051351261,"id":"4","progress":0.9902541479404079,"total":1433,"current":1426}
+{"_e":"metro:bundling:progress","_t":1782051351373,"id":"4","progress":0.9902541479404079,"total":1451,"current":1429}
+{"_e":"metro:bundling:progress","_t":1782051352209,"id":"4","progress":0.9902541479404079,"total":1451,"current":1430}
+{"_e":"metro:bundling:progress","_t":1782051352326,"id":"4","progress":0.9902541479404079,"total":1453,"current":1432}
+{"_e":"metro:bundling:progress","_t":1782051352680,"id":"4","progress":0.9902541479404079,"total":1453,"current":1433}
+{"_e":"metro:bundling:progress","_t":1782051352824,"id":"4","progress":0.9902541479404079,"total":1464,"current":1439}
+{"_e":"metro:bundling:progress","_t":1782051353082,"id":"4","progress":0.9902541479404079,"total":1466,"current":1441}
+{"_e":"metro:bundling:progress","_t":1782051353285,"id":"4","progress":0.9902541479404079,"total":1469,"current":1445}
+{"_e":"metro:bundling:progress","_t":1782051353424,"id":"4","progress":0.9902541479404079,"total":1477,"current":1450}
+{"_e":"metro:bundling:progress","_t":1782051353525,"id":"4","progress":0.9902541479404079,"total":1479,"current":1451}
+{"_e":"metro:bundling:progress","_t":1782051353540,"id":"4","progress":0.9902541479404079,"total":1479,"current":1452}
+{"_e":"metro:bundling:progress","_t":1782051353641,"id":"4","progress":0.9902541479404079,"total":1480,"current":1452}
+{"_e":"metro:bundling:progress","_t":1782051353755,"id":"4","progress":0.9902541479404079,"total":1484,"current":1453}
+{"_e":"metro:cache_write_error","_t":1782051353764,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051353764,"id":"4","progress":0.9902541479404079,"total":1484,"current":1453}
+{"_e":"metro:cache_write_error","_t":1782051353806,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051353806,"id":"4","progress":0.9902541479404079,"total":1484,"current":1453}
+{"_e":"metro:bundling:progress","_t":1782051354390,"id":"4","progress":0.9902541479404079,"total":1493,"current":1457}
+{"_e":"metro:cache_write_error","_t":1782051354420,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051354420,"id":"4","progress":0.9902541479404079,"total":1493,"current":1457}
+{"_e":"metro:bundling:progress","_t":1782051354906,"id":"4","progress":0.9902541479404079,"total":1500,"current":1472}
+{"_e":"metro:cache_write_error","_t":1782051354916,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051354917,"id":"4","progress":0.9902541479404079,"total":1500,"current":1472}
+{"_e":"metro:cache_write_error","_t":1782051354936,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051354936,"id":"4","progress":0.9902541479404079,"total":1500,"current":1472}
+{"_e":"metro:cache_write_error","_t":1782051354936,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051354936,"id":"4","progress":0.9902541479404079,"total":1500,"current":1472}
+{"_e":"metro:bundling:progress","_t":1782051355007,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051355413,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051355413,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051355413,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051355413,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051355418,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051355418,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051355423,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051355423,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051355423,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051355423,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051355423,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051355423,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051356370,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356370,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051356371,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356371,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051356372,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356372,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:cache_write_error","_t":1782051356372,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356372,"id":"4","progress":0.9902541479404079,"total":1506,"current":1478}
+{"_e":"metro:bundling:progress","_t":1782051356389,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356398,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356398,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356398,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356398,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356399,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356399,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356399,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356399,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356399,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356400,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356400,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356401,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356402,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356402,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:cache_write_error","_t":1782051356402,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356403,"id":"4","progress":0.9902541479404079,"total":1506,"current":1479}
+{"_e":"metro:bundling:progress","_t":1782051356507,"id":"4","progress":0.9902541479404079,"total":1516,"current":1489}
+{"_e":"metro:cache_write_error","_t":1782051356902,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051356902,"id":"4","progress":0.9902541479404079,"total":1516,"current":1489}
+{"_e":"metro:bundling:progress","_t":1782051356909,"id":"4","progress":0.9902541479404079,"total":1516,"current":1490}
+{"_e":"metro:cache_write_error","_t":1782051357139,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051357139,"id":"4","progress":0.9902541479404079,"total":1516,"current":1490}
+{"_e":"metro:cache_write_error","_t":1782051357144,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051357144,"id":"4","progress":0.9902541479404079,"total":1516,"current":1490}
+{"_e":"metro:cache_write_error","_t":1782051357145,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051357145,"id":"4","progress":0.9902541479404079,"total":1516,"current":1490}
+{"_e":"metro:bundling:progress","_t":1782051357167,"id":"4","progress":0.9902541479404079,"total":1516,"current":1491}
+{"_e":"metro:bundling:progress","_t":1782051357272,"id":"4","progress":0.9902541479404079,"total":1517,"current":1492}
+{"_e":"metro:bundling:progress","_t":1782051357456,"id":"4","progress":0.9902541479404079,"total":1517,"current":1493}
+{"_e":"metro:bundling:progress","_t":1782051357634,"id":"4","progress":0.9902541479404079,"total":1518,"current":1493}
+{"_e":"metro:cache_write_error","_t":1782051357637,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051357637,"id":"4","progress":0.9902541479404079,"total":1518,"current":1493}
+{"_e":"metro:cache_write_error","_t":1782051357643,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051357643,"id":"4","progress":0.9902541479404079,"total":1518,"current":1493}
+{"_e":"metro:cache_write_error","_t":1782051357644,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051357644,"id":"4","progress":0.9902541479404079,"total":1518,"current":1493}
+{"_e":"metro:cache_write_error","_t":1782051357834,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051357834,"id":"4","progress":0.9902541479404079,"total":1518,"current":1493}
+{"_e":"metro:bundling:progress","_t":1782051357836,"id":"4","progress":0.9902541479404079,"total":1518,"current":1494}
+{"_e":"metro:bundling:progress","_t":1782051357946,"id":"4","progress":0.9902541479404079,"total":1523,"current":1502}
+{"_e":"metro:cache_write_error","_t":1782051358009,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358010,"id":"4","progress":0.9902541479404079,"total":1523,"current":1502}
+{"_e":"metro:cache_write_error","_t":1782051358014,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358014,"id":"4","progress":0.9902541479404079,"total":1523,"current":1502}
+{"_e":"metro:cache_write_error","_t":1782051358015,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358015,"id":"4","progress":0.9902541479404079,"total":1523,"current":1502}
+{"_e":"metro:cache_write_error","_t":1782051358015,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358015,"id":"4","progress":0.9902541479404079,"total":1523,"current":1502}
+{"_e":"metro:bundling:progress","_t":1782051358044,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358241,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358241,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358671,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358671,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358672,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358672,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358672,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358672,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358829,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358829,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358966,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358966,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358968,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358968,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:cache_write_error","_t":1782051358968,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051358968,"id":"4","progress":0.9902541479404079,"total":1523,"current":1503}
+{"_e":"metro:bundling:progress","_t":1782051358973,"id":"4","progress":0.9902541479404079,"total":1523,"current":1504}
+{"_e":"metro:cache_write_error","_t":1782051359016,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359016,"id":"4","progress":0.9902541479404079,"total":1523,"current":1504}
+{"_e":"metro:cache_write_error","_t":1782051359017,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359018,"id":"4","progress":0.9902541479404079,"total":1523,"current":1504}
+{"_e":"metro:cache_write_error","_t":1782051359019,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359019,"id":"4","progress":0.9902541479404079,"total":1523,"current":1504}
+{"_e":"metro:bundling:progress","_t":1782051359073,"id":"4","progress":0.9902541479404079,"total":1525,"current":1512}
+{"_e":"metro:cache_write_error","_t":1782051359639,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359639,"id":"4","progress":0.9902541479404079,"total":1525,"current":1512}
+{"_e":"metro:cache_write_error","_t":1782051359639,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359639,"id":"4","progress":0.9902541479404079,"total":1525,"current":1512}
+{"_e":"metro:cache_write_error","_t":1782051359639,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359639,"id":"4","progress":0.9902541479404079,"total":1525,"current":1512}
+{"_e":"metro:cache_write_error","_t":1782051359640,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359640,"id":"4","progress":0.9902541479404079,"total":1525,"current":1512}
+{"_e":"metro:cache_write_error","_t":1782051359640,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359640,"id":"4","progress":0.9902541479404079,"total":1525,"current":1512}
+{"_e":"metro:cache_write_error","_t":1782051359640,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051359640,"id":"4","progress":0.9902541479404079,"total":1525,"current":1512}
+{"_e":"metro:bundling:progress","_t":1782051359959,"id":"4","progress":0.9902541479404079,"total":1525,"current":1513}
+{"_e":"metro:bundling:progress","_t":1782051360072,"id":"4","progress":0.9902541479404079,"total":1525,"current":1514}
+{"_e":"metro:cache_write_error","_t":1782051360101,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360102,"id":"4","progress":0.9902541479404079,"total":1525,"current":1514}
+{"_e":"metro:bundling:progress","_t":1782051360770,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360773,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360773,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360774,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360774,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360775,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360775,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360775,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360775,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360775,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360775,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360776,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360776,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360782,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360782,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360783,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360783,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360783,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360783,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360790,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360790,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360790,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360790,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360794,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360795,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360797,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360797,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360797,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360797,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360798,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360798,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360798,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360798,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360801,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360801,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360809,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360809,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:cache_write_error","_t":1782051360842,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051360842,"id":"4","progress":0.9902541479404079,"total":1525,"current":1515}
+{"_e":"metro:bundling:progress","_t":1782051360875,"id":"4","progress":0.9960694436979306,"total":1525,"current":1522}
+{"_e":"metro:bundling:progress","_t":1782051361416,"id":"4","progress":0.9973787691480783,"total":1525,"current":1523}
+{"_e":"metro:cache_write_error","_t":1782051361419,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051361419,"id":"4","progress":0.9973787691480783,"total":1525,"current":1523}
+{"_e":"metro:bundling:progress","_t":1782051362418,"id":"4","progress":0.9986889545821016,"total":1525,"current":1524}
+{"_e":"metro:cache_write_error","_t":1782051362419,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051362419,"id":"4","progress":0.9986889545821016,"total":1525,"current":1524}
+{"_e":"metro:bundling:progress","_t":1782051364061,"id":"4","progress":0.999,"total":1525,"current":1525}
+{"_e":"metro:bundling:progress","_t":1782051365126,"id":"4","progress":0.999,"total":1526,"current":1525}
+{"_e":"metro:cache_write_error","_t":1782051365135,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051365136,"id":"4","progress":0.999,"total":1526,"current":1525}
+{"_e":"metro:bundling:progress","_t":1782051366262,"id":"4","progress":0.999,"total":1526,"current":1526}
+{"_e":"metro:cache_write_error","_t":1782051366264,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051366264,"id":"4","progress":0.999,"total":1526,"current":1526}
+{"_e":"metro:bundling:progress","_t":1782051366372,"id":"4","progress":0.999,"total":1527,"current":1526}
+{"_e":"metro:bundling:progress","_t":1782051369051,"id":"4","progress":0.999,"total":1527,"current":1527}
+{"_e":"metro:bundling:progress","_t":1782051369151,"id":"4","progress":0.999,"total":1534,"current":1527}
+{"_e":"metro:cache_write_error","_t":1782051369635,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051369636,"id":"4","progress":0.999,"total":1534,"current":1527}
+{"_e":"metro:bundling:progress","_t":1782051369873,"id":"4","progress":0.999,"total":1534,"current":1528}
+{"_e":"metro:cache_write_error","_t":1782051369876,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051369877,"id":"4","progress":0.999,"total":1534,"current":1528}
+{"_e":"metro:cache_write_error","_t":1782051369877,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051369877,"id":"4","progress":0.999,"total":1534,"current":1528}
+{"_e":"metro:cache_write_error","_t":1782051369877,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051369877,"id":"4","progress":0.999,"total":1534,"current":1528}
+{"_e":"metro:cache_write_error","_t":1782051369879,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051369879,"id":"4","progress":0.999,"total":1534,"current":1528}
+{"_e":"metro:cache_write_error","_t":1782051369883,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051369883,"id":"4","progress":0.999,"total":1534,"current":1528}
+{"_e":"metro:cache_write_error","_t":1782051369883,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051369884,"id":"4","progress":0.999,"total":1534,"current":1528}
+{"_e":"metro:bundling:progress","_t":1782051369988,"id":"4","progress":0.999,"total":1536,"current":1533}
+{"_e":"metro:bundling:progress","_t":1782051370462,"id":"4","progress":0.999,"total":1536,"current":1534}
+{"_e":"metro:cache_write_error","_t":1782051370464,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051370464,"id":"4","progress":0.999,"total":1536,"current":1534}
+{"_e":"metro:bundling:progress","_t":1782051370748,"id":"4","progress":0.999,"total":1536,"current":1535}
+{"_e":"metro:cache_write_error","_t":1782051370749,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051370749,"id":"4","progress":0.999,"total":1536,"current":1535}
+{"_e":"metro:bundling:progress","_t":1782051370889,"id":"4","progress":0.999,"total":1536,"current":1536}
+{"_e":"metro:cache_write_error","_t":1782051374601,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051374601,"id":"4","progress":0.999,"total":1536,"current":1536}
+{"_e":"metro:cache_write_error","_t":1782051379155,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051379155,"id":"4","progress":0.999,"total":1536,"current":1536}
+{"_e":"metro:cache_write_error","_t":1782051379187,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051379187,"id":"4","progress":0.999,"total":1536,"current":1536}
+{"_e":"metro:cache_write_error","_t":1782051379309,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051379309,"id":"4","progress":0.999,"total":1536,"current":1536}
+{"_e":"metro:cache_write_error","_t":1782051379310,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051379310,"id":"4","progress":0.999,"total":1536,"current":1536}
+{"_e":"metro:cache_write_error","_t":1782051379312,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"metro:bundling:progress","_t":1782051379312,"id":"4","progress":0.999,"total":1536,"current":1536}
+{"_e":"metro:bundling:done","_t":1782051381101,"id":"4","total":1536,"ms":125350.3737}
+{"_e":"metro:cache_write_error","_t":1782051381434,"message":"Cache write failed for store(s): BinaryFileStore"}
+{"_e":"root:init","_t":1782051571505,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782051571532,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782051571574,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782051576512,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782051586975,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:server_log","_t":1782051670734,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
+{"_e":"metro:instantiate","_t":1782051709986,"atlas":false,"workers":6,"host":"::","port":8081}
+{"_e":"root:init","_t":1782051816363,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782051816371,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782051816488,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782051821114,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782051825664,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:server_log","_t":1782051884743,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
+{"_e":"root:init","_t":1782052043318,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782052043368,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782052043550,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782052054493,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782052082109,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:server_log","_t":1782052099668,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
+{"_e":"root:init","_t":1782052659538,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782052659560,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782052659634,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782052665754,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782052674689,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:server_log","_t":1782052723866,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
+{"_e":"metro:instantiate","_t":1782052777858,"atlas":false,"workers":6,"host":"::","port":8081}
+{"_e":"root:init","_t":1782052915537,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782052915596,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782052915691,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782052929217,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782052941741,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:server_log","_t":1782053118324,"level":"warn","data":["Failed to download the latest version of React Native DevTools. Using a fallback version instead. Connect to the internet or check your network settings."]}
+{"_e":"root:init","_t":1782053124767,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782053124777,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782053124835,"mode":"development","files":["../..\\..\\.env"],"env":{"EXPO_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","EXPO_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","NEXT_PUBLIC_APP_URL":"https://attendy-edu.vercel.app","NEXT_PUBLIC_SUPABASE_ANON_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MjY4NjIsImV4cCI6MjA5MzAwMjg2Mn0.WHuj9LU6z9euvJsUs1_wtcOMGV-1UtqyYUiCJ9uZ3YU","NEXT_PUBLIC_SUPABASE_URL":"https://eptgeumtcsiusxusxcos.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwdGdldW10Y3NpdXN4dXN4Y29zIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQyNjg2MiwiZXhwIjoyMDkzMDAyODYyfQ.3MKax64RIhiuBqa25Stdrf1OoFKE8ntOqYRpToEwC3A","TERMII_API_KEY":"TLNfGWJVkDrVbvkBCZlDMeymhsILUadCsxvomdUUDYbCFFSURBSkAeWrCZbBAe","TERMII_SENDER_ID":"Attendy"}}
+{"_e":"devserver:start","_t":1782053126250,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782053126755,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}

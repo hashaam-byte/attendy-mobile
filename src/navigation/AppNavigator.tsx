@@ -11,6 +11,7 @@ import * as Font from 'expo-font';
 
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
+import AttendySplash from '../components/AttendySplash';
 
 import SlugEntryScreen from '../screens/SlugEntryScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -171,7 +172,7 @@ function RootNavigator() {
   if (loading) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.bg, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#16a34a" />
+        <ActivityIndicator size="large" color={theme.success} />
       </View>
     );
   }
@@ -193,6 +194,7 @@ function RootNavigator() {
 
 function ThemedNavigationContainer() {
   const { theme, isDark } = useTheme();
+  const [showSplash, setShowSplash] = useState(true);
   const navTheme = {
     ...(isDark ? DarkTheme : DefaultTheme),
     colors: {
@@ -209,6 +211,7 @@ function ThemedNavigationContainer() {
     <NavigationContainer theme={navTheme}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <RootNavigator />
+      {showSplash && <AttendySplash onFinish={() => setShowSplash(false)} />}
     </NavigationContainer>
   );
 }
