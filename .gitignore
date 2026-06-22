@@ -1,3 +1,8 @@
 node_modules/
 .env
 .expo/
+
+# Explicitly ignore Expo dev logs (avoid committing start.log)
+.expo/dev/logs/
+.expo/dev/logs/*.log
+.expo/dev/logs/start.log
