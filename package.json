@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios"
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -23,9 +23,10 @@
     "expo-constants": "~56.0.18",
     "expo-font": "~56.0.6",
     "expo-linear-gradient": "~56.0.4",
+    "expo-modules-core": "~56.0.17",
     "expo-secure-store": "~56.0.4",
+    "expo-splash-screen": "~56.0.10",
     "expo-status-bar": "~56.0.4",
-    "expo-splash-screen": "~0.29.13",
     "react": "19.2.3",
     "react-native": "0.85.3",
     "react-native-qrcode-svg": "^6.3.2",
