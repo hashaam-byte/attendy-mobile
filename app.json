@@ -17,11 +17,10 @@
       "bundleIdentifier": "com.attendy.mobile"
     },
     "android": {
-  "adaptiveIcon": {
-  "foregroundImage": "./assets/adaptive-icon.png",
-  "monochromeImage": "./assets/adaptive-icon-monochrome.png",
-  "backgroundColor": "#ffffff"
-}
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/adaptive-icon-monochrome.png",
+        "backgroundColor": "#ffffff"
       },
       "package": "com.attendy.mobile",
       "permissions": [
@@ -58,3 +57,4 @@
       }
     }
   }
+}
