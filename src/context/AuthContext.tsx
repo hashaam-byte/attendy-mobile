@@ -1,6 +1,7 @@
+// src/context/AuthContext.tsx — Attendy Mobile
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
-import { AuthState } from '../lib/types';
+import { AuthState, DEFAULT_SETTINGS, type SchoolSettings } from '../lib/types';
 
 interface AuthContextValue {
   authState: AuthState | null;
@@ -16,7 +17,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check existing session on app start
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         await loadUserOrgData(session.user.id);
@@ -66,6 +66,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const { data: { user } } = await supabase.auth.getUser();
 
+      // Merge stored settings with defaults so callers always get a full
+      // SchoolSettings object — no silent undefined reads.
+      const rawSettings = (org.settings as Partial<SchoolSettings>) ?? {};
+      const mergedSettings: Partial<SchoolSettings> = {
+        ...DEFAULT_SETTINGS,
+        ...rawSettings,
+      };
+
       setAuthState({
         slug: org.slug,
         orgId: orgUser.organisation_id,
@@ -77,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: orgUser.role,
         userId,
         email: user?.email || '',
-        settings: (org.settings as Record<string, unknown>) || {},
+        settings: mergedSettings,
         maxMembers: org.max_members || 50,
       });
       setLoading(false);
