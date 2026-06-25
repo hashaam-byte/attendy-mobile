@@ -101,6 +101,24 @@ export default function ScannerScreen() {
         setResult({ type:'error', name:member.full_name, time:new Date().toLocaleTimeString(), message:insErr.message });
         setProcessing(false); clearResult(); return;
       }
+
+      // Trigger SMS notification for entry scans — fire-and-forget so it
+      // never blocks the scanner UI. The /api/notify route on your Next.js
+      // server handles Termii, logging, and WhatsApp fallback.
+      if (mode === 'entry') {
+        const WEB_URL = process.env.EXPO_PUBLIC_WEB_URL ?? 'https://attendy-edu.vercel.app';
+        fetch(`${WEB_URL}/api/notify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type:      'arrival',
+            member_id: member.id,
+            org_id:    authState.orgId,
+            is_late:   status === 'late',
+          }),
+        }).catch(() => {}); // silent — never block the gate
+      }
+
       const t = new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
       const rt: ResultType = mode==='exit'?'exit':status==='present'?'success':'late';
       Vibration.vibrate(rt==='success'?[50]:rt==='late'?[100,50,100]:rt==='exit'?[50,50,50]:[200,100,200]);
