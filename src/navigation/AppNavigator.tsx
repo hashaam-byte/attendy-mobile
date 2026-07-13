@@ -13,6 +13,8 @@ import { AuthProvider, useAuth } from '../context/AuthContext';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import SplashAnimation from '../components/SplashAnimation';
+import * as Notifications from 'expo-notifications';
+import { getNavigationFromNotification } from '../lib/notification';
 
 import SlugEntryScreen from '../screens/SlugEntryScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -196,7 +198,7 @@ function RootNavigator() {
   );
 }
 
-function ThemedNavigationContainer() {
+function ThemedNavigationContainer({ navigationRef }: { navigationRef?: React.RefObject<any> }) {
   const { theme, isDark } = useTheme();
   const navTheme = {
     ...(isDark ? DarkTheme : DefaultTheme),
@@ -211,7 +213,7 @@ function ThemedNavigationContainer() {
     },
   };
   return (
-    <NavigationContainer theme={navTheme}>
+    <NavigationContainer ref={navigationRef} theme={navTheme}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <RootNavigator />
     </NavigationContainer>
@@ -221,6 +223,7 @@ function ThemedNavigationContainer() {
 export default function AppNavigator() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [showCustomSplash, setShowCustomSplash] = useState(true);
+  const navigationRef = React.useRef<any>(null);
 
   useEffect(() => {
     async function loadResources() {
@@ -243,6 +246,35 @@ export default function AppNavigator() {
     }
   }, [fontsLoaded]);
 
+  // Handle notification taps — navigate to the right screen
+  useEffect(() => {
+    // App was opened FROM a notification (killed state)
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (response?.notification?.request?.content?.data) {
+        const target = getNavigationFromNotification(
+          response.notification.request.content.data as Record<string, unknown>
+        );
+        if (target && navigationRef.current) {
+          // Delay slightly to let navigator mount first
+          setTimeout(() => {
+            navigationRef.current?.navigate(target.screen, target.params);
+          }, 500);
+        }
+      }
+    });
+
+    // App was in background/foreground when notification was tapped
+    const sub = Notifications.addNotificationResponseReceivedListener((response) => {
+      const data = response.notification.request.content.data as Record<string, unknown>;
+      const target = getNavigationFromNotification(data);
+      if (target && navigationRef.current) {
+        navigationRef.current?.navigate(target.screen, target.params);
+      }
+    });
+
+    return () => sub.remove();
+  }, []);
+
   if (!fontsLoaded) {
     return null;
   }
@@ -252,7 +284,7 @@ export default function AppNavigator() {
       <SafeAreaProvider>
         <ThemeProvider>
           <AuthProvider>
-            <ThemedNavigationContainer />
+            <ThemedNavigationContainer navigationRef={navigationRef} />
           </AuthProvider>
           {showCustomSplash && (
             <SplashAnimation onFinish={() => setShowCustomSplash(false)} />

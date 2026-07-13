@@ -1,6 +1,6 @@
 {
   "name": "attendy-mobile",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "main": "index.ts",
   "private": true,
   "scripts": {
@@ -21,9 +21,11 @@
     "expo-asset": "~56.0.17",
     "expo-camera": "~56.0.8",
     "expo-constants": "~56.0.18",
+    "expo-device": "~56.0.4",
     "expo-font": "~56.0.6",
     "expo-linear-gradient": "~56.0.4",
     "expo-modules-core": "~56.0.17",
+    "expo-notifications": "~56.0.20",
     "expo-secure-store": "~56.0.4",
     "expo-splash-screen": "~56.0.10",
     "expo-status-bar": "~56.0.4",

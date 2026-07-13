@@ -2,7 +2,7 @@
   "expo": {
     "name": "Attendy",
     "slug": "attendy-mobile",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.attendy.mobile"
+      "bundleIdentifier": "com.attendy.mobile",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,8 +27,12 @@
       },
       "package": "com.attendy.mobile",
       "permissions": [
-        "android.permission.CAMERA"
-      ]
+        "android.permission.CAMERA",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.VIBRATE",
+        "android.permission.USE_EXACT_ALARM"
+      ],
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -47,6 +54,15 @@
             "image": "./assets/splash-icon-dark.png",
             "backgroundColor": "#070F08"
           }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/adaptive-icon.png",
+          "color": "#16a34a",
+          "sounds": [],
+          "mode": "production"
         }
       ],
       "expo-asset"

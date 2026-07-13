@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
 import { AuthState, DEFAULT_SETTINGS, type SchoolSettings } from '../lib/types';
+import { registerForPushNotifications, unregisterPushToken } from '../lib/notification';
 
 interface AuthContextValue {
   authState: AuthState | null;
@@ -106,6 +107,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         maxMembers: org.max_members || 50,
       });
       setLoading(false);
+
+      // Register push token after auth state is set — non-blocking
+      // so it never delays the login flow even if permission is denied.
+      registerForPushNotifications(userId, orgUser.organisation_id, orgUser.role)
+        .catch((err) => console.warn('[PUSH] Registration failed silently:', err));
+
       return true;
     } catch (err) {
       console.error('loadUserOrgData error:', err);
@@ -115,6 +122,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut() {
+    // Unregister push token before signing out so this device
+    // stops receiving notifications after logout.
+    if (authState?.userId && authState?.orgId) {
+      await unregisterPushToken(authState.userId, authState.orgId)
+        .catch(() => {}); // never block logout
+    }
     await supabase.auth.signOut();
     setAuthState(null);
   }
