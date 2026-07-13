@@ -11,6 +11,7 @@ import * as Font from 'expo-font';
 
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import SplashAnimation from '../components/SplashAnimation';
 
 import SlugEntryScreen from '../screens/SlugEntryScreen';
@@ -247,15 +248,17 @@ export default function AppNavigator() {
   }
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <ThemedNavigationContainer />
-        </AuthProvider>
-        {showCustomSplash && (
-          <SplashAnimation onFinish={() => setShowCustomSplash(false)} />
-        )}
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <ThemedNavigationContainer />
+          </AuthProvider>
+          {showCustomSplash && (
+            <SplashAnimation onFinish={() => setShowCustomSplash(false)} />
+          )}
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }

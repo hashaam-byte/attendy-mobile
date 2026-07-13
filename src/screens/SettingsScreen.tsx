@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
+import { supabase } from '../lib/supabase';
+
+const APP_VERSION = Constants.expoConfig?.version ?? Constants.manifest?.version ?? '1.0.0';
 
 export default function SettingsScreen() {
   const { authState, signOut } = useAuth();
@@ -11,6 +15,32 @@ export default function SettingsScreen() {
   const c = authState?.primaryColor || '#16a34a';
   const settings = authState?.settings ?? {};
   const isAdmin = authState?.role === 'admin';
+
+  // ── Auto-update check ─────────────────────────────────────
+  // Reads the latest_version from your Supabase platform_settings table.
+  // When you want to prompt users to update, set:
+  //   platform_settings → key: 'app_version' → value: {"latest": "1.2.0", "force": false}
+  const [updateInfo, setUpdateInfo] = useState<{ latest: string; force: boolean } | null>(null);
+
+  useEffect(() => {
+    async function checkForUpdate() {
+      try {
+        const { data } = await supabase
+          .from('platform_settings')
+          .select('value')
+          .eq('key', 'app_version')
+          .single();
+        if (!data?.value) return;
+        const info = data.value as { latest: string; force?: boolean };
+        if (info.latest && info.latest !== APP_VERSION) {
+          setUpdateInfo({ latest: info.latest, force: info.force ?? false });
+        }
+      } catch {
+        // Silently ignore — update check is non-critical
+      }
+    }
+    checkForUpdate();
+  }, []);
 
   function handleSignOut() {
     Alert.alert('Sign Out','Are you sure you want to sign out?',[{text:'Cancel',style:'cancel'},{text:'Sign Out',style:'destructive',onPress:signOut}]);
@@ -115,13 +145,35 @@ export default function SettingsScreen() {
         ))}
       </View>
 
+      {/* Update available banner */}
+      {updateInfo && (
+        <TouchableOpacity
+          style={[styles.updateBanner, { backgroundColor: updateInfo.force ? theme.dangerBg : theme.infoBg, borderColor: updateInfo.force ? theme.danger : theme.info }]}
+          onPress={() => Linking.openURL('https://expo.dev/accounts/hashaam-byte/projects/attendy-mobile')}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="arrow-up-circle-outline" size={20} color={updateInfo.force ? theme.danger : theme.info} />
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.updateTitle, { color: updateInfo.force ? theme.danger : theme.info }]}>
+              {updateInfo.force ? 'Update Required' : 'Update Available'} · v{updateInfo.latest}
+            </Text>
+            <Text style={[styles.updateSub, { color: theme.textMuted }]}>
+              {updateInfo.force
+                ? 'This version is no longer supported. Please update to continue.'
+                : 'A new version of Attendy is available. Tap to update.'}
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color={theme.textMuted} />
+        </TouchableOpacity>
+      )}
+
       {/* Sign out */}
       <TouchableOpacity style={[styles.signOut,{backgroundColor:theme.dangerBg,borderColor:`${theme.danger}30`}]} onPress={handleSignOut} activeOpacity={0.8}>
         <Ionicons name="log-out-outline" size={18} color={theme.danger}/>
         <Text style={[styles.signOutText,{color:theme.danger}]}>Sign Out</Text>
       </TouchableOpacity>
 
-      <Text style={[styles.footer,{color:theme.textMuted}]}>Attendy Edu · v1.0.0 · 🇳🇬</Text>
+      <Text style={[styles.footer,{color:theme.textMuted}]}>Attendy Edu · v{APP_VERSION} · 🇳🇬</Text>
     </ScrollView>
   );
 }
@@ -151,5 +203,8 @@ const styles = StyleSheet.create({
   linkSub:{fontSize:FONT.xs,marginTop:1},
   signOut:{flexDirection:'row',alignItems:'center',justifyContent:'center',gap:8,margin:SPACING.lg,marginTop:SPACING.xxl,borderWidth:1,borderRadius:RADIUS.xl,paddingVertical:14},
   signOutText:{fontSize:FONT.md,fontWeight:'700'},
+  updateBanner:{flexDirection:'row',alignItems:'center',gap:12,marginHorizontal:SPACING.lg,marginTop:SPACING.lg,padding:SPACING.md,borderWidth:1,borderRadius:RADIUS.xl},
+  updateTitle:{fontSize:FONT.sm,fontWeight:'700',marginBottom:2},
+  updateSub:{fontSize:FONT.xs,lineHeight:16},
   footer:{textAlign:'center',fontSize:FONT.xs,paddingBottom:16},
 });
