@@ -17,18 +17,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Track whether the initial session check has completed. The
+    // onAuthStateChange listener fires SIGNED_IN on startup too, so without
+    // this flag we would call loadUserOrgData twice on first launch.
+    let initialCheckDone = false;
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         await loadUserOrgData(session.user.id);
       } else {
         setLoading(false);
       }
+      initialCheckDone = true;
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT' || !session) {
         setAuthState(null);
         setLoading(false);
+        return;
+      }
+
+      // SIGNED_IN fires when the app restores a session from storage (e.g.
+      // after the app is killed and reopened). TOKEN_REFRESHED fires when
+      // Supabase silently renews an expired JWT. Both need a fresh org data
+      // load so the user lands on their dashboard correctly.
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // Skip if getSession() already handled it synchronously above
+        if (!initialCheckDone) return;
+        await loadUserOrgData(session.user.id);
       }
     });
 

@@ -22,49 +22,84 @@ type Student = {
 type Log = { id: string; scanned_at: string; status: string; scan_type: string; late_reason: string | null };
 
 export default function ParentDashboardScreen({ navigation, route }: any) {
-  const { students } = route.params;
+  const { students } = route.params ?? {};
   const { theme, isDark, mode, setMode } = useTheme();
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [logs, setLogs] = useState<Log[]>([]);
+  const [orgSettings, setOrgSettings] = useState<{ term_start_date?: string; term_end_date?: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const selected = students[selectedIdx] as Student;
-  const org      = selected?.organisations;
-  const primary  = org?.primary_color || '#16a34a';
-
-  // Use a 90-day rolling window as the term proxy.
-  // The parent portal has no access to org settings, so we can't read
-  // term_start_date — 90 days is a reasonable proxy for one school term.
-  const WINDOW_DAYS = 90;
-  const windowStart = new Date(Date.now() - WINDOW_DAYS * 24 * 60 * 60 * 1000);
+  // Guard: if we somehow arrive here with no students, show a safe error
+  // screen instead of crashing on students[selectedIdx].
+  const safeStudents: Student[] = Array.isArray(students) && students.length > 0 ? students : [];
+  const selected = safeStudents[selectedIdx] as Student | undefined;
+  const org     = selected?.organisations ?? null;
+  const primary = org?.primary_color || '#16a34a';
 
   const fetchLogs = useCallback(async (refresh = false) => {
     if (!selected) return;
     if (refresh) setRefreshing(true); else setLoading(true);
-    const { data } = await supabase
-      .from('attendance_logs')
-      .select('id,scanned_at,status,scan_type,late_reason')
-      .eq('member_id', selected.id)
-      .eq('scan_type', 'entry')
-      .gte('scanned_at', windowStart.toISOString())
-      .order('scanned_at', { ascending: false });
-    setLogs(data ?? []);
+
+    // Fetch org settings and logs in parallel — org settings give us the
+    // real term start/end dates so the attendance % matches what the school
+    // admin sees on the web dashboard.
+    const [{ data: logsData }, { data: orgData }] = await Promise.all([
+      supabase
+        .from('attendance_logs')
+        .select('id,scanned_at,status,scan_type,late_reason')
+        .eq('member_id', selected.id)
+        .eq('scan_type', 'entry')
+        .gte('scanned_at', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString())
+        .order('scanned_at', { ascending: false }),
+      supabase
+        .from('organisations')
+        .select('settings')
+        .eq('id', selected.organisation_id)
+        .single(),
+    ]);
+
+    setLogs(logsData ?? []);
+    if (orgData?.settings) {
+      const s = orgData.settings as any;
+      setOrgSettings({
+        term_start_date: s.term_start_date ?? undefined,
+        term_end_date:   s.term_end_date   ?? undefined,
+      });
+    }
     setLoading(false);
     setRefreshing(false);
   }, [selected?.id]);
 
   useEffect(() => { fetchLogs(); }, [fetchLogs]);
 
-  const today        = new Date().toISOString().split('T')[0];
-  const todayLog     = logs.find(l => l.scanned_at.startsWith(today));
-  const presentCount = logs.filter(l => l.status === 'present').length;
-  const lateCount    = logs.filter(l => l.status === 'late').length;
-  const excusedCount = logs.filter(l => l.status === 'excused').length;
+  // ── Term date calculation ─────────────────────────────────────
+  // Use real term dates from org settings when available.
+  // Fall back to a 90-day window only if the school hasn't configured them.
+  const termStart = orgSettings?.term_start_date
+    ? new Date(orgSettings.term_start_date)
+    : new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+  const termEnd = orgSettings?.term_end_date
+    ? new Date(orgSettings.term_end_date)
+    : new Date();
+
+  const today    = new Date().toISOString().split('T')[0];
+  const todayLog = logs.find(l => l.scanned_at.startsWith(today));
+
+  // Filter logs to the term window for accurate stats
+  const termLogs     = logs.filter(l => {
+    const d = new Date(l.scanned_at);
+    return d >= termStart && d <= termEnd;
+  });
+  const presentCount = termLogs.filter(l => l.status === 'present').length;
+  const lateCount    = termLogs.filter(l => l.status === 'late').length;
+  const excusedCount = termLogs.filter(l => l.status === 'excused').length;
   const attendedDays = presentCount + lateCount + excusedCount;
 
-  // Denominator = calendar days in the window (not just scanned days)
-  const totalDays  = WINDOW_DAYS;
+  const totalDays  = Math.max(
+    Math.ceil((termEnd.getTime() - termStart.getTime()) / (1000 * 60 * 60 * 24)),
+    1
+  );
   const absentDays = Math.max(0, totalDays - attendedDays);
   const pct        = Math.min(100, Math.round((attendedDays / totalDays) * 100));
   const pctColor   = pct >= 75 ? theme.success : pct >= 50 ? theme.warn : theme.danger;
@@ -74,6 +109,27 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
     late:    { label: 'Late',    color: theme.warn,    bg: theme.warnBg,    icon: 'time-outline'             },
     excused: { label: 'Excused', color: theme.info,    bg: theme.infoBg,    icon: 'shield-checkmark-outline' },
   };
+
+  // ── Empty / error state ───────────────────────────────────────
+  if (safeStudents.length === 0) {
+    return (
+      <View style={{ flex: 1, backgroundColor: theme.bg, alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+        <Ionicons name="alert-circle-outline" size={48} color={theme.textMuted} />
+        <Text style={{ fontSize: FONT.lg, fontWeight: '700', color: theme.text, marginTop: 16, textAlign: 'center' }}>
+          No Students Found
+        </Text>
+        <Text style={{ fontSize: FONT.sm, color: theme.textMuted, marginTop: 8, textAlign: 'center', lineHeight: 20 }}>
+          We couldn't find any students linked to this phone number. Please check with your school admin that the correct number is registered.
+        </Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{ marginTop: 28, paddingHorizontal: 24, paddingVertical: 12, borderRadius: RADIUS.lg, backgroundColor: '#16a34a' }}
+        >
+          <Text style={{ color: 'white', fontWeight: '700', fontSize: FONT.sm }}>Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.bg }}>
@@ -95,11 +151,11 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
 
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetchLogs(true)} tintColor={primary} />}>
         {/* Child selector tabs */}
-        {students.length > 1 && (
+        {safeStudents.length > 1 && (
           <ScrollView horizontal showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: SPACING.lg, gap: 8, paddingVertical: SPACING.md }}
           >
-            {students.map((s: Student, i: number) => (
+            {safeStudents.map((s: Student, i: number) => (
               <TouchableOpacity key={s.id} onPress={() => setSelectedIdx(i)}
                 style={[styles.tab, { backgroundColor: selectedIdx === i ? primary : theme.bgCard, borderColor: selectedIdx === i ? primary : theme.border }]}
               >
@@ -165,7 +221,12 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
           <View style={styles.barHeader}>
             <View>
               <Text style={[styles.barTitle, { color: theme.textSub }]}>Attendance rate</Text>
-              <Text style={[styles.barWindowText, { color: theme.textMuted }]}>Last 90 days</Text>
+              <Text style={[styles.barWindowText, { color: theme.textMuted }]}>
+                {orgSettings?.term_start_date
+                  ? `Term: ${new Date(orgSettings.term_start_date).toLocaleDateString('en-NG', { day: 'numeric', month: 'short' })} – ${new Date(orgSettings.term_end_date ?? new Date()).toLocaleDateString('en-NG', { day: 'numeric', month: 'short' })}`
+                  : 'Last 90 days (term dates not set)'
+                }
+              </Text>
             </View>
             <Text style={[styles.barPct, { color: pctColor }]}>
               {pct}% {pct >= 75 ? '✓ Good' : '⚠ Below 75%'}
@@ -175,7 +236,7 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
             <View style={[styles.barFill, { width: `${pct}%` as any, backgroundColor: pctColor }]} />
           </View>
           <Text style={[styles.barSub, { color: theme.textMuted }]}>
-            {attendedDays} attended of {totalDays} calendar days
+            {attendedDays} attended of {totalDays} days in term · {absentDays} absent
           </Text>
         </View>
 

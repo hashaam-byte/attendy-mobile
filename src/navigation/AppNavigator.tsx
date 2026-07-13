@@ -68,12 +68,11 @@ function DashboardStack() {
       <Stack.Screen name="DashboardHome" component={DashboardScreen} />
       <Stack.Screen name="Absent" component={AbsentScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Absent Today' }} />
-      <Stack.Screen name="Notices" component={NoticesScreen}
-        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'School Notices' }} />
-      <Stack.Screen name="Notifications" component={NotificationsScreen}
-        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'SMS Log' }} />
-      <Stack.Screen name="Reports" component={ReportsScreen}
-        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Reports' }} />
+      {/* Notices, Notifications and Reports are intentionally NOT registered
+          here — they live as top-level tabs in AdminTabs / TeacherTabs so
+          the tab bar stays visible when the user navigates to them. Putting
+          them in both a nested stack AND a tab causes React Navigation to
+          pick the wrong instance and lose the tab bar. */}
       <Stack.Screen name="Students" component={StudentsStack} />
     </Stack.Navigator>
   );
@@ -115,13 +114,17 @@ function AdminTabs({ pc }: { pc: string }) {
   const HEADER_OPTS = useHeaderOpts();
   return (
     <Tab.Navigator screenOptions={tabScreenOptions(pc, theme)}>
-      <Tab.Screen name="Dashboard"     component={DashboardStack} />
-      <Tab.Screen name="Scanner"       component={ScannerScreen}  options={{ headerShown: false }} />
-      <Tab.Screen name="Students"      component={StudentsStack} />
-        <Tab.Screen name="Reports"       component={ReportsScreen}
-          options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Reports' }} />
-        <Tab.Screen name="Settings"      component={SettingsScreen}
-          options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Settings' }} />
+      <Tab.Screen name="Dashboard" component={DashboardStack} />
+      <Tab.Screen name="Scanner" component={ScannerScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Students" component={StudentsStack} />
+      <Tab.Screen name="Reports" component={ReportsScreen}
+        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Reports' }} />
+      <Tab.Screen name="Notices" component={NoticesScreen}
+        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'School Notices' }} />
+      <Tab.Screen name="Notifications" component={NotificationsScreen}
+        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'SMS Log' }} />
+      <Tab.Screen name="Settings" component={SettingsScreen}
+        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Settings' }} />
     </Tab.Navigator>
   );
 }
