@@ -60,9 +60,7 @@
         "expo-notifications",
         {
           "icon": "./assets/adaptive-icon.png",
-          "color": "#16a34a",
-          "sounds": [],
-          "mode": "production"
+          "color": "#16a34a"
         }
       ],
       "expo-asset"

@@ -9,13 +9,16 @@ import { Platform } from 'react-native';
 import { supabase } from './supabase';
 
 // ── Configure how notifications appear when app is foregrounded ──
+// SDK 53+: use shouldShowBanner + shouldShowList instead of the
+// deprecated shouldShowAlert (which was split in iOS 14).
+// shouldShowBanner = top-of-screen banner
+// shouldShowList   = Notification Center / lock screen entry
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge:  true,
-    shouldShowBanner: true,
-    shouldShowList: true,
+    shouldShowBanner:  true,
+    shouldShowList:    true,
+    shouldPlaySound:   true,
+    shouldSetBadge:    true,
   }),
 });
 
@@ -185,12 +188,7 @@ export async function scheduleLocalNotification(opts: {
       sound:   'default',
       ...(Platform.OS === 'android' ? { channelId: opts.channel ?? 'attendy-default' } : {}),
     },
-    trigger: opts.seconds != null
-      ? {
-          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: opts.seconds,
-        }
-      : null,
+    trigger: opts.seconds ? { seconds: opts.seconds } : null,
   });
 }
 
