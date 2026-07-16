@@ -30,6 +30,7 @@ import ReportsScreen from '../screens/ReportsScreen';
 import NoticesScreen from '../screens/NoticesScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import OpenWebScreen from '../screens/OpenWebScreen';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -126,6 +127,8 @@ function AdminTabs({ pc }: { pc: string }) {
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'School Notices' }} />
       <Tab.Screen name="Notifications" component={NotificationsScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'SMS Log' }} />
+      <Tab.Screen name="OpenWeb" component={OpenWebScreen}
+        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Web Dashboard' }} />
       <Tab.Screen name="Settings" component={SettingsScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Settings' }} />
     </Tab.Navigator>
@@ -141,6 +144,8 @@ function TeacherTabs({ pc }: { pc: string }) {
       <Tab.Screen name="Scanner"   component={ScannerScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Notices"   component={NoticesScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Notices' }} />
+      <Tab.Screen name="OpenWeb"   component={OpenWebScreen}
+        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Web Dashboard' }} />
       <Tab.Screen name="Settings"  component={SettingsScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Settings' }} />
     </Tab.Navigator>
