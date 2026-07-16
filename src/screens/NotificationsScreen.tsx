@@ -105,7 +105,7 @@ export default function NotificationsScreen() {
     if (!authState) return;
     Alert.alert(
       'Clear SMS Log',
-      'This will delete all SMS history for your school. This cannot be undone.',
+      'This will permanently delete all SMS history for your school from the database. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -113,22 +113,32 @@ export default function NotificationsScreen() {
           style: 'destructive',
           onPress: async () => {
             setClearing(true);
-            const { error } = await supabase
-              .from('notifications_log')
-              .delete()
-              .eq('organisation_id', authState.orgId);
-            if (error) {
-              Alert.alert('Error', 'Could not clear logs: ' + error.message);
-            } else {
-              setLogs([]);
-              setTodayCount(0);
-              setFailedCount(0);
+            try {
+              // Use the clear_org_notifications RPC which runs as SECURITY DEFINER
+              // (superuser) — the regular supabase client DELETE is blocked by RLS
+              // on notifications_log even for admins. The RPC verifies admin role
+              // via auth.uid() before deleting, so it's still secure.
+              const { data, error } = await supabase
+                .rpc('clear_org_notifications', { org_id: authState.orgId });
+
+              if (error) {
+                Alert.alert('Error', 'Could not clear logs: ' + error.message);
+              } else {
+                setLogs([]);
+                setTodayCount(0);
+                setFailedCount(0);
+                Alert.alert('Done', `Cleared ${data ?? 0} SMS records from the database.`);
+              }
+            } catch (err: any) {
+              Alert.alert('Error', err?.message ?? 'Unknown error');
+            } finally {
+              setClearing(false);
             }
-            setClearing(false);
           },
         },
       ]
     );
+    
   }
 
   if (loading) {
