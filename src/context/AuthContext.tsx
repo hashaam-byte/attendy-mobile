@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../lib/supabase';
 import { AuthState, DEFAULT_SETTINGS, type SchoolSettings } from '../lib/types';
-import { registerForPushNotifications, unregisterPushToken } from '../lib/notifications';
-import { syncQueueToServer, clearLocalStore } from '../lib/offlineStore';
+import { registerForPushNotifications, unregisterPushToken } from '../lib/notification';
+import { syncQueueToServer, clearLocalStore } from '../lib/OfflineStore';
 
 // Key where we persist the full AuthState so the app opens
 // logged in even with no internet connection.
