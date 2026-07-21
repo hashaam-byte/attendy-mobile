@@ -13,6 +13,7 @@ import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { formatDate, formatTime, getInitials } from '../lib/utils';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
+import { registerParentPushToken } from '../lib/notification';
 
 type Student = {
   id: string; full_name: string; class_name: string | null;
@@ -30,12 +31,27 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Guard: if we somehow arrive here with no students, show a safe error
-  // screen instead of crashing on students[selectedIdx].
   const safeStudents: Student[] = Array.isArray(students) && students.length > 0 ? students : [];
   const selected = safeStudents[selectedIdx] as Student | undefined;
   const org     = selected?.organisations ?? null;
   const primary = org?.primary_color || '#16a34a';
+
+  // Register push token for this parent so they receive arrival/absence pushes.
+  // We register for all their children's member IDs so each student's
+  // notifications go to the right parent.
+  useEffect(() => {
+    if (safeStudents.length === 0) return;
+    const first = safeStudents[0];
+    if (!first.parent_phone) return;
+    // Register once per student (all go to same device/parent)
+    for (const student of safeStudents) {
+      registerParentPushToken(
+        student.id,
+        student.organisation_id,
+        first.parent_phone,
+      ).catch(() => {}); // never block UI on push registration
+    }
+  }, [safeStudents.map(s => s.id).join(',')]);
 
   const fetchLogs = useCallback(async (refresh = false) => {
     if (!selected) return;

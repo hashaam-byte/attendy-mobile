@@ -1,8 +1,32 @@
 // src/context/AuthContext.tsx — Attendy Mobile
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../lib/supabase';
 import { AuthState, DEFAULT_SETTINGS, type SchoolSettings } from '../lib/types';
-import { registerForPushNotifications, unregisterPushToken } from '../lib/notification';
+import { registerForPushNotifications, unregisterPushToken } from '../lib/notifications';
+import { syncQueueToServer, clearLocalStore } from '../lib/offlineStore';
+
+// Key where we persist the full AuthState so the app opens
+// logged in even with no internet connection.
+const AUTH_STATE_KEY = '@attendy:auth_state_v2';
+
+async function saveAuthStateToStorage(state: AuthState) {
+  try {
+    await AsyncStorage.setItem(AUTH_STATE_KEY, JSON.stringify(state));
+  } catch {}
+}
+
+async function loadAuthStateFromStorage(): Promise<AuthState | null> {
+  try {
+    const raw = await AsyncStorage.getItem(AUTH_STATE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as AuthState;
+  } catch { return null; }
+}
+
+async function clearAuthStateFromStorage() {
+  try { await AsyncStorage.removeItem(AUTH_STATE_KEY); } catch {}
+}
 
 interface AuthContextValue {
   authState: AuthState | null;
@@ -18,34 +42,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Track whether the initial session check has completed. The
-    // onAuthStateChange listener fires SIGNED_IN on startup too, so without
-    // this flag we would call loadUserOrgData twice on first launch.
     let initialCheckDone = false;
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    async function init() {
+      // ── Step 1: Load cached auth state immediately ──────────────────────
+      // This makes the app open to the dashboard instantly even with no
+      // internet — the user sees their org name, role, and settings right away.
+      const cached = await loadAuthStateFromStorage();
+      if (cached) {
+        setAuthState(cached);
+        setLoading(false); // show dashboard immediately from cache
+      }
+
+      // ── Step 2: Try to get a fresh session from Supabase ────────────────
+      // Supabase persists the JWT in AsyncStorage, so getSession() works
+      // without a network request when the token hasn't expired yet.
+      // If it has expired, Supabase auto-refreshes using the refresh token
+      // (this DOES need internet — if offline, we stay on the cached state).
+      const { data: { session } } = await supabase.auth.getSession();
+
       if (session?.user) {
+        // Refresh org data from server — updates cached state with latest
+        // org settings, plan, etc. If this fails (offline), user stays on
+        // the cached auth state loaded in Step 1.
         await loadUserOrgData(session.user.id);
-      } else {
+      } else if (!cached) {
+        // No session and no cache — show login screen
         setLoading(false);
       }
+      // If we had a cache but no valid session, keep showing dashboard
+      // but loadUserOrgData will fail gracefully and user can still scan.
+
       initialCheckDone = true;
-    });
+    }
+
+    init();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT' || !session) {
         setAuthState(null);
+        await clearAuthStateFromStorage();
         setLoading(false);
         return;
       }
-
-      // SIGNED_IN fires when the app restores a session from storage (e.g.
-      // after the app is killed and reopened). TOKEN_REFRESHED fires when
-      // Supabase silently renews an expired JWT. Both need a fresh org data
-      // load so the user lands on their dashboard correctly.
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        // Skip if getSession() already handled it synchronously above
-        if (!initialCheckDone) return;
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && initialCheckDone) {
         await loadUserOrgData(session.user.id);
       }
     });
@@ -92,7 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ...rawSettings,
       };
 
-      setAuthState({
+      const newState: AuthState = {
         slug: org.slug,
         orgId: orgUser.organisation_id,
         orgName: org.name,
@@ -105,7 +145,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: user?.email || '',
         settings: mergedSettings,
         maxMembers: org.max_members || 50,
-      });
+      };
+
+      setAuthState(newState);
+      // Persist to AsyncStorage so next launch works offline
+      await saveAuthStateToStorage(newState);
       setLoading(false);
 
       // Register push token after auth state is set — non-blocking
@@ -122,12 +166,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut() {
-    // Unregister push token before signing out so this device
-    // stops receiving notifications after logout.
     if (authState?.userId && authState?.orgId) {
-      await unregisterPushToken(authState.userId, authState.orgId)
-        .catch(() => {}); // never block logout
+      await syncQueueToServer(authState.orgId).catch(() => {});
+      await clearLocalStore(authState.orgId).catch(() => {});
+      await unregisterPushToken(authState.userId, authState.orgId).catch(() => {});
     }
+    // Clear the cached auth state so the app shows login on next open
+    await clearAuthStateFromStorage();
     await supabase.auth.signOut();
     setAuthState(null);
   }
