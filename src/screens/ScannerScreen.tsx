@@ -4,7 +4,6 @@ import {
   Vibration, ActivityIndicator, AppState, AppStateStatus,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import NetInfo from '@react-native-community/netinfo';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -61,21 +60,56 @@ export default function ScannerScreen() {
   const c  = authState?.primaryColor || '#16a34a';
   const mc = mode === 'entry' ? c : theme.purple;
 
-  // ── Network monitoring ─────────────────────────────────────
+  // ── Network detection (no NetInfo dependency) ──────────────
+  // We ping Supabase health endpoint every 10s. Works in Expo Go
+  // and bare workflow without any native module.
+  const pingTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  async function checkOnline(): Promise<boolean> {
+    try {
+      const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
+      if (!url) return true;
+      // AbortSignal.timeout() not available in older Hermes — use AbortController
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 3000);
+      try {
+        const res = await fetch(`${url}/rest/v1/`, {
+          method: 'HEAD',
+          signal: controller.signal,
+        });
+        return res.ok || res.status < 500;
+      } finally {
+        clearTimeout(timer);
+      }
+    } catch { return false; }
+  }
+
   useEffect(() => {
-    const unsub = NetInfo.addEventListener(state => {
-      const online = state.isConnected === true && state.isInternetReachable !== false;
+    let mounted = true;
+
+    async function pollNetwork() {
+      const online = await checkOnline();
+      if (!mounted) return;
+      const wasOffline = !isOnline;
       setIsOnline(online);
-      if (online && authState) {
-        // Back online — sync queue then refresh member list
+
+      if (online && wasOffline && authState) {
+        // Just came back online — sync queue then refresh members
         syncQueueToServer(authState.orgId).then(({ uploaded }) => {
           if (uploaded > 0) setQueueCount(0);
           return doSync();
         }).catch(console.warn);
       }
-    });
-    return () => unsub();
-  }, [authState?.orgId]);
+    }
+
+    pollNetwork();
+    pingTimer.current = setInterval(pollNetwork, 10000);
+
+    return () => {
+      mounted = false;
+      if (pingTimer.current) clearInterval(pingTimer.current);
+    };
+  }, [authState?.orgId, isOnline]);
 
   // ── Initial sync + periodic refresh ───────────────────────
   useEffect(() => {
