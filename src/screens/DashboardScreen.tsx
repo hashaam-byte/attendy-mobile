@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { formatTime, getCutoffDisplay } from '../lib/utils';
-import { RADIUS, FONT, SPACING } from '../lib/theme';
+import { RADIUS, FONT, SPACING, SCREEN_BOTTOM_PAD } from '../lib/theme';
 
 type Scan = { id: string; scanned_at: string; status: string; members: { full_name: string; class_name: string | null } | null };
 
@@ -74,6 +74,7 @@ export default function DashboardScreen({ navigation }: any) {
     <View style={{ flex: 1, backgroundColor: theme.bg }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: SCREEN_BOTTOM_PAD }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => fetch(true)} tintColor={c} />}
       >
         {/* Header */}

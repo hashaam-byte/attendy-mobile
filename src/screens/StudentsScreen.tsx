@@ -9,7 +9,7 @@ import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { getInitials } from '../lib/utils';
 import { SearchInput } from '../components/ui';
-import { RADIUS, FONT, SPACING } from '../lib/theme';
+import { RADIUS, FONT, SPACING, SCREEN_BOTTOM_PAD } from '../lib/theme';
 
 type Student = { id:string; full_name:string; class_name:string|null; parent_phone:string|null; employee_id:string|null; is_active:boolean };
 
@@ -89,7 +89,7 @@ export default function StudentsScreen({ navigation }: any) {
 
       <FlatList data={filtered} keyExtractor={i=>i.id}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=>load(true)} tintColor={c}/>}
-        contentContainerStyle={{paddingBottom:32}}
+        contentContainerStyle={{paddingBottom: SCREEN_BOTTOM_PAD}}
         ItemSeparatorComponent={() => <View style={{height:1,backgroundColor:theme.border,marginLeft:72}}/>}
         renderItem={({item}) => {
           const initBg = item.is_active ? `${c}18` : theme.bgCardAlt;

@@ -91,3 +91,7 @@ export const DARK = {
 
 export type Theme = typeof LIGHT;
 export type ThemeMode = 'light' | 'dark' | 'system';
+
+// Bottom padding needed for screens to clear the floating tab bar
+export const TAB_BAR_HEIGHT = 80;
+export const SCREEN_BOTTOM_PAD = 96; // TAB_BAR_HEIGHT + extra breathing room

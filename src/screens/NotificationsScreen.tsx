@@ -14,7 +14,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { formatDateTime } from '../lib/utils';
-import { RADIUS, FONT, SPACING } from '../lib/theme';
+import { RADIUS, FONT, SPACING, SCREEN_BOTTOM_PAD } from '../lib/theme';
 
 type NotifLog = {
   id:        string;
@@ -201,7 +201,7 @@ export default function NotificationsScreen() {
         data={logs}
         keyExtractor={(i) => i.id}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => load(true)} tintColor={c} />}
-        contentContainerStyle={{ paddingBottom: 32 }}
+        contentContainerStyle={{ paddingBottom: SCREEN_BOTTOM_PAD }}
         ItemSeparatorComponent={() => (
           <View style={{ height: 1, backgroundColor: theme.border, marginLeft: 64 }} />
         )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, ActivityIndicator, Platform, TextStyle } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Platform, TextStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -95,21 +95,111 @@ function StudentsStack() {
   );
 }
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+// ── Tab icons map ─────────────────────────────────────────────
+const TAB_ICONS: Record<string, { active: string; inactive: string }> = {
+  Dashboard:     { active: 'grid',                inactive: 'grid-outline' },
+  Scanner:       { active: 'qr-code',             inactive: 'qr-code-outline' },
+  Students:      { active: 'people',              inactive: 'people-outline' },
+  Reports:       { active: 'bar-chart',           inactive: 'bar-chart-outline' },
+  Notices:       { active: 'megaphone',           inactive: 'megaphone-outline' },
+  Notifications: { active: 'chatbubbles',         inactive: 'chatbubbles-outline' },
+  Settings:      { active: 'settings',            inactive: 'settings-outline' },
+  OpenWeb:       { active: 'globe',               inactive: 'globe-outline' },
+  Absent:        { active: 'alert-circle',        inactive: 'alert-circle-outline' },
+  Classes:       { active: 'book',                inactive: 'book-outline' },
+};
+
+// ── Custom floating tab bar ───────────────────────────────────
+function FloatingTabBar({ state, descriptors, navigation, primaryColor }: any) {
+  const insets = useSafeAreaInsets();
+  const { theme, isDark } = useTheme();
+
+  // Only show max 5 tabs to keep it clean
+  const visibleRoutes = state.routes.slice(0, 5);
+
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        bottom: Math.max(insets.bottom, 8) + 4,
+        left: 16,
+        right: 16,
+        backgroundColor: theme.bgTabBar ?? theme.bgCard,
+        borderRadius: 28,
+        flexDirection: 'row',
+        paddingVertical: 10,
+        paddingHorizontal: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: isDark ? 0.4 : 0.12,
+        shadowRadius: 24,
+        elevation: 12,
+        borderWidth: 1,
+        borderColor: theme.border,
+      }}
+    >
+      {visibleRoutes.map((route: any, index: number) => {
+        const { options } = descriptors[route.key];
+        const focused = state.index === index;
+        const label = options.tabBarLabel ?? options.title ?? route.name;
+        const icons = TAB_ICONS[route.name] ?? { active: 'ellipse', inactive: 'ellipse-outline' };
+
+        const onPress = () => {
+          const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+          if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
+        };
+
+        return (
+          <TouchableOpacity
+            key={route.key}
+            onPress={onPress}
+            activeOpacity={0.7}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: 4,
+            }}
+          >
+            {/* Active indicator pill behind icon */}
+            {focused && (
+              <View style={{
+                position: 'absolute',
+                top: 0, bottom: 0,
+                left: 6, right: 6,
+                backgroundColor: `${primaryColor}18`,
+                borderRadius: 18,
+              }} />
+            )}
+            <Ionicons
+              name={(focused ? icons.active : icons.inactive) as any}
+              size={focused ? 22 : 20}
+              color={focused ? primaryColor : theme.textMuted}
+            />
+            <Text style={{
+              fontSize: 9,
+              fontWeight: focused ? '700' : '500',
+              color: focused ? primaryColor : theme.textMuted,
+              marginTop: 3,
+              letterSpacing: 0.2,
+            }}>
+              {typeof label === 'string' ? label : route.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
 function tabScreenOptions(pc: string, theme: any) {
   return ({ route }: { route: RouteProp<ParamListBase, string> }) => ({
     headerShown: false,
-    tabBarStyle: {
-      backgroundColor: theme.bgTabBar,
-      borderTopColor: theme.border,
-      borderTopWidth: 1,
-      paddingBottom: Platform.OS === 'ios' ? 20 : 6,
-      paddingTop: 6,
-      height: Platform.OS === 'ios' ? 84 : 62,
-    },
     tabBarActiveTintColor: pc,
     tabBarInactiveTintColor: theme.textMuted,
-    tabBarLabelStyle: { fontSize: 10, fontWeight: '600' as TextStyle['fontWeight'] } as TextStyle,
-    tabBarIcon: ({ focused, color }: { focused: boolean; color: string }) => <TabIcon name={(route as any).name} focused={focused} color={color} />,
+    tabBarStyle: { display: 'none' }, // hide default, we use custom
   } as any);
 }
 
@@ -117,18 +207,15 @@ function AdminTabs({ pc }: { pc: string }) {
   const { theme } = useTheme();
   const HEADER_OPTS = useHeaderOpts();
   return (
-    <Tab.Navigator screenOptions={tabScreenOptions(pc, theme)}>
+    <Tab.Navigator
+      screenOptions={tabScreenOptions(pc, theme)}
+      tabBar={(props) => <FloatingTabBar {...props} primaryColor={pc} />}
+    >
       <Tab.Screen name="Dashboard" component={DashboardStack} />
       <Tab.Screen name="Scanner" component={ScannerScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Students" component={StudentsStack} />
       <Tab.Screen name="Reports" component={ReportsScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Reports' }} />
-      <Tab.Screen name="Notices" component={NoticesScreen}
-        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'School Notices' }} />
-      <Tab.Screen name="Notifications" component={NotificationsScreen}
-        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'SMS Log' }} />
-      <Tab.Screen name="OpenWeb" component={OpenWebScreen}
-        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Web Dashboard' }} />
       <Tab.Screen name="Settings" component={SettingsScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Settings' }} />
     </Tab.Navigator>
@@ -139,14 +226,15 @@ function TeacherTabs({ pc }: { pc: string }) {
   const { theme } = useTheme();
   const HEADER_OPTS = useHeaderOpts();
   return (
-    <Tab.Navigator screenOptions={tabScreenOptions(pc, theme)}>
+    <Tab.Navigator
+      screenOptions={tabScreenOptions(pc, theme)}
+      tabBar={(props) => <FloatingTabBar {...props} primaryColor={pc} />}
+    >
       <Tab.Screen name="Dashboard" component={DashboardStack} />
-      <Tab.Screen name="Scanner"   component={ScannerScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Notices"   component={NoticesScreen}
+      <Tab.Screen name="Scanner" component={ScannerScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Notices" component={NoticesScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Notices' }} />
-      <Tab.Screen name="OpenWeb"   component={OpenWebScreen}
-        options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Web Dashboard' }} />
-      <Tab.Screen name="Settings"  component={SettingsScreen}
+      <Tab.Screen name="Settings" component={SettingsScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Settings' }} />
     </Tab.Navigator>
   );
@@ -156,10 +244,10 @@ function GatemanTabs({ pc }: { pc: string }) {
   const { theme } = useTheme();
   const HEADER_OPTS = useHeaderOpts();
   return (
-    <Tab.Navigator screenOptions={({ route }: { route: RouteProp<ParamListBase, string> }) => ({
-      ...tabScreenOptions(pc, theme)({ route }),
-      tabBarStyle: { ...tabScreenOptions(pc, theme)({ route }).tabBarStyle, backgroundColor: theme.bg },
-    })}>
+    <Tab.Navigator
+      screenOptions={tabScreenOptions(pc, theme)}
+      tabBar={(props) => <FloatingTabBar {...props} primaryColor={pc} />}
+    >
       <Tab.Screen name="Scanner"  component={ScannerScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Settings" component={SettingsScreen}
         options={{ ...(HEADER_OPTS as any), headerShown: true, title: 'Settings' }} />

@@ -9,7 +9,7 @@ import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { Notice } from '../lib/types';
 import { formatDateTime, timeAgo } from '../lib/utils';
-import { RADIUS, FONT, SPACING } from '../lib/theme';
+import { RADIUS, FONT, SPACING,  } from '../lib/theme';
 
 export default function NoticesScreen() {
   const { authState } = useAuth();
@@ -29,7 +29,7 @@ export default function NoticesScreen() {
     if (!authState) return;
     if (refresh) setRefreshing(true); else setLoading(true);
     const { data, error } = await supabase
-      .from('notices')
+      .from('school_notices')
       .select('id,organisation_id,title,body,created_by,pinned,created_at')
       .eq('organisation_id', authState.orgId)
       .order('pinned', { ascending: false })
@@ -44,7 +44,7 @@ export default function NoticesScreen() {
   async function handlePost() {
     if (!title.trim() || !body.trim() || !authState) return;
     setPosting(true);
-    const { error } = await supabase.from('notices').insert({
+    const { error } = await supabase.from('school_notices').insert({
       organisation_id: authState.orgId,
       title: title.trim(),
       body: body.trim(),
@@ -63,7 +63,7 @@ export default function NoticesScreen() {
   }
 
   async function togglePin(notice: Notice) {
-    await supabase.from('notices').update({ pinned: !notice.pinned }).eq('id', notice.id);
+    await supabase.from('school_notices').update({ pinned: !notice.pinned }).eq('id', notice.id);
     setNotices(prev =>
       prev
         .map(n => (n.id === notice.id ? { ...n, pinned: !n.pinned } : n))
@@ -79,7 +79,7 @@ export default function NoticesScreen() {
         style: 'destructive',
         onPress: async () => {
           setDeletingId(notice.id);
-          await supabase.from('notices').delete().eq('id', notice.id);
+          await supabase.from('school_notices').delete().eq('id', notice.id);
           setNotices(prev => prev.filter(n => n.id !== notice.id));
           setDeletingId(null);
         },

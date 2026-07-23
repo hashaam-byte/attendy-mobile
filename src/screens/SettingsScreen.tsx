@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { RADIUS, FONT, SPACING } from '../lib/theme';
+import { RADIUS, FONT, SPACING, SCREEN_BOTTOM_PAD } from '../lib/theme';
 import { supabase } from '../lib/supabase';
 
 const APP_VERSION = Constants.expoConfig?.version ?? Constants.manifest?.version ?? '1.0.0';
@@ -53,7 +53,7 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <ScrollView style={{flex:1,backgroundColor:theme.bg}} contentContainerStyle={{paddingBottom:40}}>
+    <ScrollView style={{flex:1,backgroundColor:theme.bg}} contentContainerStyle={{paddingBottom: SCREEN_BOTTOM_PAD}}>
       {/* Profile */}
       <View style={[styles.profileCard,{backgroundColor:`${c}10`,borderColor:`${c}25`}]}>
         <View style={[styles.avatar,{backgroundColor:c}]}><Ionicons name="person" size={24} color="white"/></View>
