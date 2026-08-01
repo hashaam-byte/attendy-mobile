@@ -109,13 +109,17 @@ export interface NotificationLog {
   members?: { full_name: string } | null;
 }
 
+export type NoticePriority = 'low' | 'normal' | 'high' | 'urgent';
+
 export interface Notice {
   id: string;
   organisation_id: string;
   title: string;
   body: string;
+  priority: NoticePriority;
+  target_classes: string[] | null;
+  expires_at: string | null;
   created_by: string | null;
-  pinned: boolean;
   created_at: string;
 }
 

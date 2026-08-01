@@ -7,9 +7,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
-import { Notice } from '../lib/types';
+import { Notice, NoticePriority } from '../lib/types';
 import { formatDateTime, timeAgo } from '../lib/utils';
 import { RADIUS, FONT, SPACING,  } from '../lib/theme';
+
+const PRIORITY_CONFIG: Record<NoticePriority, { label: string; color: string }> = {
+  low:    { label: 'Low',    color: '#94A3B8' },
+  normal: { label: 'Normal', color: '#3B82F6' },
+  high:   { label: 'High',   color: '#F59E0B' },
+  urgent: { label: 'Urgent', color: '#EF4444' },
+};
 
 export default function NoticesScreen() {
   const { authState } = useAuth();
@@ -20,6 +27,7 @@ export default function NoticesScreen() {
   const [composerOpen, setComposerOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [priority, setPriority] = useState<NoticePriority>('normal');
   const [posting, setPosting] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const c = authState?.primaryColor || '#16a34a';
@@ -28,13 +36,16 @@ export default function NoticesScreen() {
   const load = useCallback(async (refresh = false) => {
     if (!authState) return;
     if (refresh) setRefreshing(true); else setLoading(true);
+    // Mirrors the web query exactly: same columns, same "not expired" filter,
+    // same ordering (newest first — the web app has no pin/priority sort).
     const { data, error } = await supabase
       .from('school_notices')
-      .select('id,organisation_id,title,body,created_by,pinned,created_at')
+      .select('id,organisation_id,title,body,priority,target_classes,expires_at,created_by,created_at')
       .eq('organisation_id', authState.orgId)
-      .order('pinned', { ascending: false })
+      .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
       .order('created_at', { ascending: false });
     if (!error) setNotices(data ?? []);
+    else console.warn('[Notices] load failed:', error.message);
     setLoading(false);
     setRefreshing(false);
   }, [authState?.orgId]);
@@ -48,27 +59,19 @@ export default function NoticesScreen() {
       organisation_id: authState.orgId,
       title: title.trim(),
       body: body.trim(),
+      priority,
       created_by: authState.userId,
-      pinned: false,
     });
     setPosting(false);
     if (!error) {
       setTitle('');
       setBody('');
+      setPriority('normal');
       setComposerOpen(false);
       load(true);
     } else {
       Alert.alert('Could not post notice', error.message);
     }
-  }
-
-  async function togglePin(notice: Notice) {
-    await supabase.from('school_notices').update({ pinned: !notice.pinned }).eq('id', notice.id);
-    setNotices(prev =>
-      prev
-        .map(n => (n.id === notice.id ? { ...n, pinned: !n.pinned } : n))
-        .sort((a, b) => Number(b.pinned) - Number(a.pinned) || (b.created_at > a.created_at ? 1 : -1))
-    );
   }
 
   function confirmDelete(notice: Notice) {
@@ -102,37 +105,51 @@ export default function NoticesScreen() {
         keyExtractor={i => i.id}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => load(true)} tintColor={c} />}
         contentContainerStyle={{ padding: SPACING.lg, paddingBottom: 96, gap: SPACING.md }}
-        renderItem={({ item }) => (
-          <View style={[styles.card, { backgroundColor: theme.bgCard, borderColor: theme.border }]}>
-            {item.pinned && (
-              <View style={[styles.pinBadge, { backgroundColor: theme.warnBg }]}>
-                <Ionicons name="pin" size={11} color={theme.warn} />
-                <Text style={[styles.pinBadgeText, { color: theme.warn }]}>Pinned</Text>
+        renderItem={({ item }) => {
+          const cfg = PRIORITY_CONFIG[item.priority] ?? PRIORITY_CONFIG.normal;
+          const isUrgent = item.priority === 'urgent';
+          return (
+            <View
+              style={[
+                styles.card,
+                { backgroundColor: theme.bgCard, borderColor: isUrgent ? theme.danger : theme.border },
+              ]}
+            >
+              <View style={styles.badgeRow}>
+                <View style={[styles.priorityBadge, { backgroundColor: cfg.color + '22' }]}>
+                  <Text style={[styles.priorityBadgeText, { color: cfg.color }]}>{cfg.label}</Text>
+                </View>
+                {item.target_classes && item.target_classes.length > 0 && (
+                  <View style={styles.classRow}>
+                    <Ionicons name="people-outline" size={11} color={theme.textMuted} />
+                    <Text style={[styles.classText, { color: theme.textMuted }]}>
+                      {item.target_classes.join(', ')}
+                    </Text>
+                  </View>
+                )}
               </View>
-            )}
-            <Text style={[styles.title, { color: theme.text }]}>{item.title}</Text>
-            <Text style={[styles.body, { color: theme.textSub }]}>{item.body}</Text>
-            <View style={styles.footerRow}>
-              <Text style={[styles.time, { color: theme.textMuted }]}>{timeAgo(item.created_at)}</Text>
-              {isAdmin && (
-                <View style={styles.adminActions}>
-                  <TouchableOpacity onPress={() => togglePin(item)} style={styles.iconBtn}>
-                    <Ionicons
-                      name={item.pinned ? 'pin' : 'pin-outline'}
-                      size={16}
-                      color={item.pinned ? theme.warn : theme.textMuted}
-                    />
-                  </TouchableOpacity>
+              <Text style={[styles.title, { color: theme.text }]}>{item.title}</Text>
+              <Text style={[styles.body, { color: theme.textSub }]}>{item.body}</Text>
+              <View style={styles.footerRow}>
+                <View style={{ flexDirection: 'row', gap: 10 }}>
+                  <Text style={[styles.time, { color: theme.textMuted }]}>{timeAgo(item.created_at)}</Text>
+                  {item.expires_at && (
+                    <Text style={[styles.time, { color: theme.textMuted }]}>
+                      Expires {formatDateTime(item.expires_at)}
+                    </Text>
+                  )}
+                </View>
+                {isAdmin && (
                   <TouchableOpacity onPress={() => confirmDelete(item)} style={styles.iconBtn} disabled={deletingId === item.id}>
                     {deletingId === item.id
                       ? <ActivityIndicator size={14} color={theme.danger} />
                       : <Ionicons name="trash-outline" size={16} color={theme.danger} />}
                   </TouchableOpacity>
-                </View>
-              )}
+                )}
+              </View>
             </View>
-          </View>
-        )}
+          );
+        }}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', padding: 56, gap: 12 }}>
             <Ionicons name="megaphone-outline" size={40} color={theme.textMuted} />
@@ -188,6 +205,30 @@ export default function NoticesScreen() {
               textAlignVertical="top"
             />
 
+            <Text style={[styles.label, { color: theme.textMuted }]}>PRIORITY</Text>
+            <View style={styles.priorityRow}>
+              {(Object.keys(PRIORITY_CONFIG) as NoticePriority[]).map((p) => {
+                const active = priority === p;
+                return (
+                  <TouchableOpacity
+                    key={p}
+                    onPress={() => setPriority(p)}
+                    style={[
+                      styles.priorityOption,
+                      {
+                        backgroundColor: active ? PRIORITY_CONFIG[p].color : 'transparent',
+                        borderColor: active ? PRIORITY_CONFIG[p].color : theme.border,
+                      },
+                    ]}
+                  >
+                    <Text style={{ color: active ? '#fff' : theme.textMuted, fontSize: FONT.xs, fontWeight: '600' }}>
+                      {PRIORITY_CONFIG[p].label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
             <TouchableOpacity
               style={[styles.postBtn, { backgroundColor: !title.trim() || !body.trim() || posting ? (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7E5') : c }]}
               onPress={handlePost}
@@ -207,8 +248,11 @@ export default function NoticesScreen() {
 
 const styles = StyleSheet.create({
   card: { borderWidth: 1, borderRadius: RADIUS.xl, padding: SPACING.lg, gap: 8 },
-  pinBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.sm },
-  pinBadgeText: { fontSize: FONT.xs, fontWeight: '700' },
+  badgeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  priorityBadge: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 3, borderRadius: RADIUS.sm },
+  priorityBadgeText: { fontSize: FONT.xs, fontWeight: '700' },
+  classRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  classText: { fontSize: FONT.xs },
   title: { fontSize: FONT.lg, fontWeight: '700' },
   body: { fontSize: FONT.base, lineHeight: 20 },
   footerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 },
@@ -228,6 +272,8 @@ const styles = StyleSheet.create({
   label: { fontSize: FONT.xs, fontWeight: '700', letterSpacing: 1.1, marginBottom: 8, marginTop: SPACING.md },
   input: { borderWidth: 1, borderRadius: RADIUS.lg, paddingHorizontal: 14, height: 48, fontSize: FONT.base },
   textArea: { height: 120, paddingTop: 12 },
+  priorityRow: { flexDirection: 'row', gap: 8 },
+  priorityOption: { flex: 1, borderWidth: 1, borderRadius: RADIUS.lg, paddingVertical: 8, alignItems: 'center' },
   postBtn: { height: 52, borderRadius: RADIUS.xl, alignItems: 'center', justifyContent: 'center', marginTop: SPACING.xl },
   postBtnText: { color: 'white', fontWeight: '700', fontSize: FONT.md },
 });
