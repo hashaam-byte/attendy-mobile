@@ -2,7 +2,7 @@
   "expo": {
     "name": "Attendy",
     "slug": "attendy-mobile",
-    "version": "1.2.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -16,7 +16,9 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.attendy.mobile",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -62,7 +64,8 @@
           "color": "#16a34a"
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "@react-native-community/datetimepicker"
     ],
     "extra": {
       "eas": {

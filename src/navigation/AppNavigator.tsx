@@ -20,6 +20,7 @@ import SlugEntryScreen      from '../screens/SlugEntryScreen';
 import LoginScreen          from '../screens/LoginScreen';
 import ParentLoginScreen    from '../screens/ParentLoginScreen';
 import ParentDashboardScreen from '../screens/ParentDashboardScreen';
+import ParentExcuseScreen   from '../screens/ParentExcuseScreen';
 import DashboardScreen      from '../screens/DashboardScreen';
 import ScannerScreen        from '../screens/ScannerScreen';
 import StudentsScreen       from '../screens/StudentsScreen';
@@ -322,6 +323,7 @@ function RootNavigator() {
           <Stack.Screen name="Login"           component={LoginScreen} />
           <Stack.Screen name="ParentLogin"     component={ParentLoginScreen} />
           <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} />
+          <Stack.Screen name="ParentExcuse"    component={ParentExcuseScreen} />
         </Stack.Group>
       )}
     </Stack.Navigator>

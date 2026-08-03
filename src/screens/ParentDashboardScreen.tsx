@@ -159,6 +159,12 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
           <Text style={[styles.headerTitle, { color: theme.text }]}>{org?.name ?? 'Parent Portal'}</Text>
           <Text style={[styles.headerSub, { color: theme.textMuted }]}>Attendance Viewer</Text>
         </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ParentExcuse', { students: safeStudents, token, studentId: selected?.id })}
+          style={{ padding: 4, marginRight: 4 }}
+        >
+          <Ionicons name="document-text-outline" size={20} color={theme.textMuted} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => setMode(mode === 'dark' ? 'light' : 'dark')} style={{ padding: 4, marginRight: 4 }}>
           <Ionicons name={isDark ? 'sunny-outline' : 'moon-outline'} size={20} color={theme.textMuted} />
         </TouchableOpacity>
