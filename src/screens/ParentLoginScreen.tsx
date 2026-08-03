@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { supabase } from '../lib/supabase';
+import { verifyParentLogin } from '../lib/webApi';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
 
 export default function ParentLoginScreen({ navigation }: any) {
   const { theme, isDark } = useTheme();
   const [phone, setPhone] = useState('');
+  const [childName, setChildName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null);
   const c = '#16a34a';
@@ -15,16 +16,18 @@ export default function ParentLoginScreen({ navigation }: any) {
   async function handleLogin() {
     const cleaned = phone.replace(/\D/g,'');
     if (cleaned.length<10) { setError('Enter a valid Nigerian phone number'); return; }
+    if (childName.trim().split(/\s+/).filter(Boolean).length < 2) {
+      setError("Enter your child's full name (first and last)"); return;
+    }
     setLoading(true); setError(null);
-    const variants = [cleaned];
-    if (cleaned.startsWith('0')&&cleaned.length===11) variants.push('234'+cleaned.slice(1));
-    if (cleaned.startsWith('234')) variants.push('0'+cleaned.slice(3));
-    const { data: students, error: fetchErr } = await supabase.from('members')
-      .select('id,full_name,class_name,organisation_id,parent_phone,organisations(name,primary_color)')
-      .in('parent_phone',variants).eq('member_type','student').eq('is_active',true);
-    if (fetchErr) { setError('Connection error. Try again.'); setLoading(false); return; }
-    if (!students||students.length===0) { setError('No students found for this number.'); setLoading(false); return; }
-    navigation.navigate('ParentDashboard',{students,phone});
+
+    // Verified server-side (phone + child's name matched against school
+    // records) — no SMS/OTP cost, and the app never queries `members`
+    // directly with the anon key anymore.
+    const result = await verifyParentLogin(cleaned, childName.trim());
+    if (!result.ok) { setError(result.error); setLoading(false); return; }
+
+    navigation.navigate('ParentDashboard', { students: result.students, token: result.token, phone: cleaned });
     setLoading(false);
   }
 
@@ -56,6 +59,14 @@ export default function ParentLoginScreen({ navigation }: any) {
             </View>
             <Text style={[styles.hint,{color:theme.textMuted}]}>As registered by your school admin</Text>
 
+            <Text style={[styles.label,{color:theme.textMuted,marginTop:14}]}>CHILD'S FULL NAME</Text>
+            <View style={[styles.inputWrap,{backgroundColor:theme.bgInput,borderColor:theme.border}]}>
+              <Ionicons name="person-outline" size={16} color={theme.textMuted}/>
+              <TextInput style={[styles.input,{color:theme.text}]} value={childName} onChangeText={t=>{setChildName(t);setError(null);}}
+                placeholder="e.g. John Doe" placeholderTextColor={theme.textMuted} autoCapitalize="words" returnKeyType="go" onSubmitEditing={handleLogin}/>
+            </View>
+            <Text style={[styles.hint,{color:theme.textMuted}]}>First and last name, as registered by the school</Text>
+
             {error&&(
               <View style={[styles.errorBox,{backgroundColor:theme.dangerBg,borderColor:`${theme.danger}25`}]}>
                 <Ionicons name="alert-circle-outline" size={14} color={theme.danger}/>
@@ -63,14 +74,14 @@ export default function ParentLoginScreen({ navigation }: any) {
               </View>
             )}
 
-            <TouchableOpacity style={[styles.btn,{backgroundColor:(!phone.trim()||loading)?(isDark?'rgba(255,255,255,0.06)':'#E5E7E5'):c}]} onPress={handleLogin} disabled={!phone.trim()||loading} activeOpacity={0.8}>
+            <TouchableOpacity style={[styles.btn,{backgroundColor:(!phone.trim()||!childName.trim()||loading)?(isDark?'rgba(255,255,255,0.06)':'#E5E7E5'):c}]} onPress={handleLogin} disabled={!phone.trim()||!childName.trim()||loading} activeOpacity={0.8}>
               {loading?<ActivityIndicator color="white" size="small"/>:(
                 <><Text style={styles.btnText}>View My Child's Attendance</Text><Ionicons name="chevron-forward" size={16} color="white"/></>
               )}
             </TouchableOpacity>
 
             <View style={styles.securityRow}>
-              {[{icon:'lock-closed-outline',text:'No account needed'},{icon:'flash-outline',text:'Instant access'}].map(({icon,text})=>(
+              {[{icon:'lock-closed-outline',text:'No account needed'},{icon:'shield-checkmark-outline',text:'Free & secure'}].map(({icon,text})=>(
                 <View key={text} style={styles.securityItem}><Ionicons name={icon as any} size={11} color={theme.textMuted}/><Text style={[styles.securityText,{color:theme.textMuted}]}>{text}</Text></View>
               ))}
             </View>

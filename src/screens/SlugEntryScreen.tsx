@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { supabase } from '../lib/supabase';
+import { lookupOrgBySlug } from '../lib/webApi';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
 
 export default function SlugEntryScreen({ navigation }: any) {
@@ -19,17 +19,14 @@ export default function SlugEntryScreen({ navigation }: any) {
     const s = slug.trim().toLowerCase().replace(/\s+/g, '-');
     if (!s) return;
     setLoading(true); setError(null);
-    const { data: org } = await supabase
-      .from('organisations')
-      .select('id,name,slug,is_active,industry,primary_color,logo_url,plan_expires_at')
-      .eq('slug', s)
-      .single();
-    if (!org) { setError('School not found. Check your school ID.'); setLoading(false); return; }
-    if (!org.is_active) { setError('This school account is suspended.'); setLoading(false); return; }
-    if (org.plan_expires_at && new Date(org.plan_expires_at) < new Date()) {
+    const result = await lookupOrgBySlug(s);
+    if (!result.ok) { setError(result.error); setLoading(false); return; }
+    const org = result.org;
+    if (org.suspended) { setError('This school account is suspended.'); setLoading(false); return; }
+    if (org.expired) {
       setError("School subscription has expired. Contact admin."); setLoading(false); return;
     }
-    navigation.navigate('Login', { slug: org.slug, orgName: org.name, primaryColor: org.primary_color || '#16a34a', logoUrl: org.logo_url, industry: org.industry });
+    navigation.navigate('Login', { slug: s, orgName: org.name, primaryColor: org.primaryColor, logoUrl: org.logoUrl, industry: 'education' });
     setLoading(false);
   }
 

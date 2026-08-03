@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { supabase } from '../lib/supabase';
+import { fetchParentAttendance } from '../lib/webApi';
 import { formatDate, formatTime, getInitials } from '../lib/utils';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
 import { registerParentPushToken } from '../lib/notification';
@@ -18,22 +18,22 @@ import { registerParentPushToken } from '../lib/notification';
 type Student = {
   id: string; full_name: string; class_name: string | null;
   organisation_id: string; parent_phone: string | null;
-  organisations: { name: string; primary_color: string } | null;
 };
 type Log = { id: string; scanned_at: string; status: string; scan_type: string; late_reason: string | null };
+type OrgInfo = { name: string; primary_color: string; settings?: { term_start_date?: string; term_end_date?: string } };
 
 export default function ParentDashboardScreen({ navigation, route }: any) {
-  const { students } = route.params ?? {};
+  const { students, token } = route.params ?? {};
   const { theme, isDark, mode, setMode } = useTheme();
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [logs, setLogs] = useState<Log[]>([]);
+  const [org, setOrg] = useState<OrgInfo | null>(null);
   const [orgSettings, setOrgSettings] = useState<{ term_start_date?: string; term_end_date?: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const safeStudents: Student[] = Array.isArray(students) && students.length > 0 ? students : [];
   const selected = safeStudents[selectedIdx] as Student | undefined;
-  const org     = selected?.organisations ?? null;
   const primary = org?.primary_color || '#16a34a';
 
   // Register push token for this parent so they receive arrival/absence pushes.
@@ -54,38 +54,40 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
   }, [safeStudents.map(s => s.id).join(',')]);
 
   const fetchLogs = useCallback(async (refresh = false) => {
-    if (!selected) return;
+    if (!selected || !token) return;
     if (refresh) setRefreshing(true); else setLoading(true);
 
-    // Fetch org settings and logs in parallel — org settings give us the
-    // real term start/end dates so the attendance % matches what the school
-    // admin sees on the web dashboard.
-    const [{ data: logsData }, { data: orgData }] = await Promise.all([
-      supabase
-        .from('attendance_logs')
-        .select('id,scanned_at,status,scan_type,late_reason')
-        .eq('member_id', selected.id)
-        .eq('scan_type', 'entry')
-        .gte('scanned_at', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString())
-        .order('scanned_at', { ascending: false }),
-      supabase
-        .from('organisations')
-        .select('settings')
-        .eq('id', selected.organisation_id)
-        .single(),
-    ]);
+    // Server verifies the signed token and only ever returns data for a
+    // studentId that was actually part of this parent's verified login —
+    // replaces the old direct anon-key queries against
+    // attendance_logs / organisations.
+    const result = await fetchParentAttendance(token, selected.id);
 
-    setLogs(logsData ?? []);
-    if (orgData?.settings) {
-      const s = orgData.settings as any;
-      setOrgSettings({
-        term_start_date: s.term_start_date ?? undefined,
-        term_end_date:   s.term_end_date   ?? undefined,
-      });
+    if (!result.ok) {
+      if (result.expired) {
+        // Session expired server-side — send them back to log in again.
+        navigation.reset({ index: 0, routes: [{ name: 'ParentLogin' }] });
+        return;
+      }
+      setLogs([]);
+    } else {
+      setLogs(result.logs);
+      if (result.org) {
+        setOrg({
+          name: result.org.name,
+          primary_color: result.org.primary_color ?? '#16a34a',
+          settings: result.org.settings ?? {},
+        });
+        const s = result.org.settings as any;
+        setOrgSettings({
+          term_start_date: s?.term_start_date ?? undefined,
+          term_end_date:   s?.term_end_date   ?? undefined,
+        });
+      }
     }
     setLoading(false);
     setRefreshing(false);
-  }, [selected?.id]);
+  }, [selected?.id, token]);
 
   useEffect(() => { fetchLogs(); }, [fetchLogs]);
 
