@@ -40,18 +40,12 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
   // We register for all their children's member IDs so each student's
   // notifications go to the right parent.
   useEffect(() => {
-    if (safeStudents.length === 0) return;
-    const first = safeStudents[0];
-    if (!first.parent_phone) return;
+    if (safeStudents.length === 0 || !token) return;
     // Register once per student (all go to same device/parent)
     for (const student of safeStudents) {
-      registerParentPushToken(
-        student.id,
-        student.organisation_id,
-        first.parent_phone,
-      ).catch(() => {}); // never block UI on push registration
+      registerParentPushToken(student.id, token).catch(() => {}); // never block UI on push registration
     }
-  }, [safeStudents.map(s => s.id).join(',')]);
+  }, [safeStudents.map(s => s.id).join(','), token]);
 
   const fetchLogs = useCallback(async (refresh = false) => {
     if (!selected || !token) return;

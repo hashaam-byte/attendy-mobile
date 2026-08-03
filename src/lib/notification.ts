@@ -7,6 +7,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import { supabase } from './supabase';
+import { registerParentPushTokenWithServer } from './webApi';
 
 // ── Configure how notifications appear when app is foregrounded ──
 // SDK 53+: use shouldShowBanner + shouldShowList instead of the
@@ -109,12 +110,16 @@ export async function registerForPushNotifications(
   return token;
 }
 
-// ── Register parent push token (no auth — anon) ──────────────────
-// Called from the parent portal mobile view after they log in with phone.
+// ── Register parent push token ────────────────────────────────────
+// Called from the parent portal mobile view after they log in with
+// phone + child's name. Requires the signed parentSessionToken from
+// that login (verifyParentLogin's response) — the server only accepts
+// a memberId that was actually part of that verified session, so a
+// device can't be registered to receive notifications about a student
+// it has no relationship to.
 export async function registerParentPushToken(
-  memberId:       string,
-  organisationId: string,
-  phone:          string,
+  memberId:          string,
+  parentSessionToken: string,
 ): Promise<string | null> {
   if (!Device.isDevice) return null;
 
@@ -146,16 +151,11 @@ export async function registerParentPushToken(
     return null;
   }
 
-  // Upsert — handles re-install / token rotation
-  await supabase
-    .from('parent_push_tokens')
-    .upsert({
-      organisation_id: organisationId,
-      member_id:       memberId,
-      expo_push_token: token,
-      phone,
-      push_enabled:    true,
-    }, { onConflict: 'member_id,expo_push_token' });
+  const result = await registerParentPushTokenWithServer(parentSessionToken, memberId, token);
+  if (!result.ok) {
+    console.warn('[PUSH] Parent token registration failed:', result.error);
+    return null;
+  }
 
   return token;
 }
@@ -173,6 +173,7 @@ export async function unregisterPushToken(
 }
 
 // ── Schedule a local notification (used for reminders) ───────────
+
 export async function scheduleLocalNotification(opts: {
   title:    string;
   body:     string;
@@ -188,7 +189,9 @@ export async function scheduleLocalNotification(opts: {
       sound:   'default',
       ...(Platform.OS === 'android' ? { channelId: opts.channel ?? 'attendy-default' } : {}),
     },
-    trigger: opts.seconds ? { seconds: opts.seconds } : null,
+    trigger: opts.seconds
+      ? { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds: opts.seconds, repeats: false }
+      : null,
   });
 }
 

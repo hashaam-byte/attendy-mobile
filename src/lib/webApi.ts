@@ -114,3 +114,24 @@ export async function submitParentExcuse(
     return { ok: false, error: 'Network error. Please check your connection and try again.' };
   }
 }
+
+export async function registerParentPushTokenWithServer(
+  token: string,
+  memberId: string,
+  expoPushToken: string
+): Promise<{ ok: true } | { ok: false; error: string; expired?: boolean }> {
+  try {
+    const res = await fetch(`${WEB_APP_URL}/api/portal/register-push-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ memberId, expoPushToken }),
+    });
+    const data = await parseJson(res);
+    if (!res.ok || !data?.ok) {
+      return { ok: false, error: data?.error ?? 'Failed to register for notifications.', expired: res.status === 401 };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, error: 'Network error. Please check your connection and try again.' };
+  }
+}
