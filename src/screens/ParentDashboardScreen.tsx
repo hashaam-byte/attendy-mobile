@@ -6,14 +6,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  ActivityIndicator, RefreshControl, Platform,
+  ActivityIndicator, RefreshControl, Platform, Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { fetchParentAttendance } from '../lib/webApi';
 import { formatDate, formatTime, getInitials } from '../lib/utils';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
-import { registerParentPushToken } from '../lib/notification';
+import { registerParentPushToken, PushRegistrationResult } from '../lib/notification';
 
 type Student = {
   id: string; full_name: string; class_name: string | null;
@@ -31,6 +31,7 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
   const [orgSettings, setOrgSettings] = useState<{ term_start_date?: string; term_end_date?: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [pushStatus, setPushStatus] = useState<PushRegistrationResult | 'pending' | null>(null);
 
   const safeStudents: Student[] = Array.isArray(students) && students.length > 0 ? students : [];
   const selected = safeStudents[selectedIdx] as Student | undefined;
@@ -38,14 +39,36 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
 
   // Register push token for this parent so they receive arrival/absence pushes.
   // We register for all their children's member IDs so each student's
-  // notifications go to the right parent.
+  // notifications go to the right parent. Result is kept in state (see
+  // the notification bell in the header) instead of just logged, since a
+  // standalone build has no console you can watch — this is how you find
+  // out *why* registration failed instead of guessing.
   useEffect(() => {
     if (safeStudents.length === 0 || !token) return;
-    // Register once per student (all go to same device/parent)
-    for (const student of safeStudents) {
-      registerParentPushToken(student.id, token).catch(() => {}); // never block UI on push registration
-    }
+    setPushStatus('pending');
+    (async () => {
+      let lastResult: PushRegistrationResult | null = null;
+      for (const student of safeStudents) {
+        lastResult = await registerParentPushToken(student.id, token);
+      }
+      setPushStatus(lastResult);
+    })();
   }, [safeStudents.map(s => s.id).join(','), token]);
+
+  function showPushStatus() {
+    if (!pushStatus || pushStatus === 'pending') {
+      Alert.alert('Notifications', 'Still registering this device for notifications — try again in a moment.');
+      return;
+    }
+    if (pushStatus.ok) {
+      Alert.alert('Notifications enabled', 'This device is registered and should receive attendance alerts.');
+    } else {
+      Alert.alert(
+        `Notifications not enabled (${pushStatus.step})`,
+        pushStatus.reason
+      );
+    }
+  }
 
   const fetchLogs = useCallback(async (refresh = false) => {
     if (!selected || !token) return;
@@ -153,6 +176,13 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
           <Text style={[styles.headerTitle, { color: theme.text }]}>{org?.name ?? 'Parent Portal'}</Text>
           <Text style={[styles.headerSub, { color: theme.textMuted }]}>Attendance Viewer</Text>
         </View>
+        <TouchableOpacity onPress={showPushStatus} style={{ padding: 4, marginRight: 4 }}>
+          <Ionicons
+            name={pushStatus && pushStatus !== 'pending' && !pushStatus.ok ? 'notifications-off-outline' : 'notifications-outline'}
+            size={20}
+            color={pushStatus && pushStatus !== 'pending' && !pushStatus.ok ? theme.danger : (pushStatus && pushStatus !== 'pending' && pushStatus.ok ? primary : theme.textMuted)}
+          />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('ParentExcuse', { students: safeStudents, token, studentId: selected?.id })}
           style={{ padding: 4, marginRight: 4 }}

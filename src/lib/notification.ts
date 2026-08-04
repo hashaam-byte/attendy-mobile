@@ -117,11 +117,24 @@ export async function registerForPushNotifications(
 // a memberId that was actually part of that verified session, so a
 // device can't be registered to receive notifications about a student
 // it has no relationship to.
+//
+// Returns a discriminated result instead of string|null on purpose:
+// every previous version of this function silently swallowed failures
+// into a console.log a standalone build has no way to show you. Now
+// the caller can surface *why* it failed (no physical device, denied
+// permission, EAS project mismatch, network error, server rejection)
+// instead of just "0 devices registered" with no further clues.
+export type PushRegistrationResult =
+  | { ok: true; token: string }
+  | { ok: false; step: 'not-a-device' | 'permission-denied' | 'token-generation' | 'server'; reason: string };
+
 export async function registerParentPushToken(
   memberId:          string,
   parentSessionToken: string,
-): Promise<string | null> {
-  if (!Device.isDevice) return null;
+): Promise<PushRegistrationResult> {
+  if (!Device.isDevice) {
+    return { ok: false, step: 'not-a-device', reason: 'Push notifications require a physical device (not a simulator/emulator).' };
+  }
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
@@ -129,7 +142,9 @@ export async function registerParentPushToken(
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
   }
-  if (finalStatus !== 'granted') return null;
+  if (finalStatus !== 'granted') {
+    return { ok: false, step: 'permission-denied', reason: `Notification permission is "${finalStatus}". Enable it in your device Settings → Attendy → Notifications.` };
+  }
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('attendy-attendance', {
@@ -146,18 +161,20 @@ export async function registerParentPushToken(
       projectId: '29fe69a3-75df-407a-a4d7-b548cf35b573',
     });
     token = result.data;
-  } catch (err) {
-    console.error('[PUSH] Parent token failed:', err);
-    return null;
+  } catch (err: any) {
+    // Common causes: this build's EAS projectId doesn't match the one
+    // hardcoded above, the app isn't registered with Expo's push
+    // service for this project, or (on some Android builds) Google
+    // Play Services / FCM isn't configured.
+    return { ok: false, step: 'token-generation', reason: err?.message ?? 'Could not generate a push token for this device.' };
   }
 
-  const result = await registerParentPushTokenWithServer(parentSessionToken, memberId, token);
-  if (!result.ok) {
-    console.warn('[PUSH] Parent token registration failed:', result.error);
-    return null;
+  const serverResult = await registerParentPushTokenWithServer(parentSessionToken, memberId, token);
+  if (!serverResult.ok) {
+    return { ok: false, step: 'server', reason: serverResult.error };
   }
 
-  return token;
+  return { ok: true, token };
 }
 
 // ── Unregister (on logout) ────────────────────────────────────────
