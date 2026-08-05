@@ -1,0 +1,15 @@
+node_modules/
+.env
+.expo/
+
+# Explicitly ignore Expo dev logs (avoid committing start.log)
+.expo/dev/logs/
+.expo/dev/logs/*.log
+.expo/dev/logs/start.log
+
+# google-services.json is gitignored (kept out of the public repo) but
+# EAS Build reads .gitignore for its upload step too by default — this
+# file overrides that specifically for EAS, since we still need the
+# builder to actually see it. Must be the LAST line so the negation
+# takes priority over any earlier matching rule.
+!google-services.json
