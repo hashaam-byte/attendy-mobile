@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView,
+  ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
@@ -11,7 +11,7 @@ import { AuthState } from '../lib/types';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
 
 export default function LoginScreen({ navigation, route }: any) {
-  const { slug, orgName, primaryColor, industry } = route.params;
+  const { slug, orgName, primaryColor, logoUrl, industry } = route.params;
   const { setAuthState } = useAuth();
   const { theme, isDark, mode, setMode } = useTheme();
   const [email, setEmail] = useState('');
@@ -19,6 +19,7 @@ export default function LoginScreen({ navigation, route }: any) {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [logoFailed, setLogoFailed] = useState(false);
   const c = primaryColor || '#16a34a';
 
   async function handleLogin() {
@@ -74,6 +75,24 @@ export default function LoginScreen({ navigation, route }: any) {
               </TouchableOpacity>
             ))}
           </View>
+        </View>
+
+        {/* School logo */}
+        <View style={styles.logoWrap}>
+          {logoUrl && !logoFailed ? (
+            <Image
+              source={{ uri: logoUrl }}
+              style={styles.logoImage}
+              onError={() => setLogoFailed(true)}
+              resizeMode="cover"
+            />
+          ) : (
+            <View style={[styles.logoFallback, { backgroundColor: `${c}18`, borderColor: `${c}40` }]}>
+              <Text style={[styles.logoFallbackText, { color: c }]}>
+                {(orgName ?? '?').trim().charAt(0).toUpperCase()}
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* School pill */}
@@ -170,6 +189,10 @@ const styles = StyleSheet.create({
   backText: { fontSize: FONT.sm, fontWeight: '500' },
   themeRow: { flexDirection: 'row', gap: 4 },
   themeBtn: { width: 30, height: 30, borderRadius: RADIUS.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  logoWrap: { alignItems: 'center', marginBottom: 14 },
+  logoImage: { width: 64, height: 64, borderRadius: RADIUS.lg },
+  logoFallback: { width: 64, height: 64, borderRadius: RADIUS.lg, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
+  logoFallbackText: { fontSize: 26, fontWeight: '800' },
   schoolPill: { flexDirection: 'row', alignItems: 'center', gap: 7, alignSelf: 'flex-start', borderWidth: 1, borderRadius: RADIUS.full, paddingHorizontal: 12, paddingVertical: 5, marginBottom: 20 },
   schoolDot: { width: 7, height: 7, borderRadius: 4 },
   schoolPillText: { fontSize: FONT.sm, fontWeight: '700' },
