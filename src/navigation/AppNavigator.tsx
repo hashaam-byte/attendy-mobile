@@ -12,8 +12,10 @@ import * as Notifications from 'expo-notifications';
 
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { ThemeProvider, useTheme } from '../context/ThemeContext';
+import { loadParentSession, StoredParentSession } from '../lib/parentSession';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import SplashAnimation from '../components/SplashAnimation';
+import UpdateBanner from '../components/UpdateBanner';
 import { getNavigationFromNotification } from '../lib/notification';
 
 import SlugEntryScreen      from '../screens/SlugEntryScreen';
@@ -304,8 +306,20 @@ function AuthenticatedApp() {
 function RootNavigator() {
   const { authState, loading } = useAuth();
   const { theme } = useTheme();
+  const [parentSession, setParentSession] = useState<StoredParentSession | null | 'checking'>('checking');
 
-  if (loading) {
+  // Only relevant if the person isn't a logged-in staff member — restore
+  // a previously-saved parent session instead of always starting fresh
+  // at SlugEntry. The token is still independently verified server-side
+  // on every request (attendance/excuse/push-token routes), so a stale
+  // or tampered local copy can't grant access on its own — this only
+  // decides which screen to *open on*, not what the person can do.
+  useEffect(() => {
+    if (authState) { setParentSession(null); return; }
+    loadParentSession().then(setParentSession);
+  }, [authState]);
+
+  if (loading || parentSession === 'checking') {
     return (
       <View style={{ flex: 1, backgroundColor: theme.bg, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator color={theme.text} size="large" />
@@ -314,7 +328,10 @@ function RootNavigator() {
   }
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName={!authState && parentSession ? 'ParentDashboard' : undefined}
+    >
       {authState ? (
         <Stack.Screen name="App" component={AuthenticatedApp} />
       ) : (
@@ -322,7 +339,11 @@ function RootNavigator() {
           <Stack.Screen name="SlugEntry"       component={SlugEntryScreen} />
           <Stack.Screen name="Login"           component={LoginScreen} />
           <Stack.Screen name="ParentLogin"     component={ParentLoginScreen} />
-          <Stack.Screen name="ParentDashboard" component={ParentDashboardScreen} />
+          <Stack.Screen
+            name="ParentDashboard"
+            component={ParentDashboardScreen}
+            initialParams={parentSession ? { students: parentSession.students, token: parentSession.token, phone: parentSession.phone } : undefined}
+          />
           <Stack.Screen name="ParentExcuse"    component={ParentExcuseScreen} />
         </Stack.Group>
       )}
@@ -405,6 +426,7 @@ export default function AppNavigator() {
           <AuthProvider>
             <ThemedNavigationContainer navigationRef={navigationRef} />
           </AuthProvider>
+          <UpdateBanner />
           {showCustomSplash && (
             <SplashAnimation onFinish={() => setShowCustomSplash(false)} />
           )}

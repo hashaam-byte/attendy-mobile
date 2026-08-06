@@ -14,6 +14,7 @@ import { fetchParentAttendance } from '../lib/webApi';
 import { formatDate, formatTime, getInitials } from '../lib/utils';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
 import { registerParentPushToken, PushRegistrationResult } from '../lib/notification';
+import { clearParentSession } from '../lib/parentSession';
 
 type Student = {
   id: string; full_name: string; class_name: string | null;
@@ -70,6 +71,23 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
     }
   }
 
+  function handleLogout() {
+    Alert.alert(
+      'Log out?',
+      "You'll need your phone number and your child's full name to log back in.",
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Log out', style: 'destructive',
+          onPress: async () => {
+            await clearParentSession();
+            navigation.reset({ index: 0, routes: [{ name: 'SlugEntry' }] });
+          },
+        },
+      ]
+    );
+  }
+
   const fetchLogs = useCallback(async (refresh = false) => {
     if (!selected || !token) return;
     if (refresh) setRefreshing(true); else setLoading(true);
@@ -82,7 +100,10 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
 
     if (!result.ok) {
       if (result.expired) {
-        // Session expired server-side — send them back to log in again.
+        // Session expired/invalid server-side — clear the local copy too,
+        // otherwise the app would keep trying to restore it on every
+        // future launch (flash dashboard, then immediately bounce here).
+        await clearParentSession();
         navigation.reset({ index: 0, routes: [{ name: 'ParentLogin' }] });
         return;
       }
@@ -194,6 +215,9 @@ export default function ParentDashboardScreen({ navigation, route }: any) {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => fetchLogs(true)} style={{ padding: 4 }}>
           <Ionicons name="refresh-outline" size={20} color={theme.textMuted} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogout} style={{ padding: 4, marginLeft: 4 }}>
+          <Ionicons name="log-out-outline" size={20} color={theme.danger} />
         </TouchableOpacity>
       </View>
 

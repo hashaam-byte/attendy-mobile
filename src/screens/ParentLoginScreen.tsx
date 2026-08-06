@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator,
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { verifyParentLogin } from '../lib/webApi';
+import { saveParentSession } from '../lib/parentSession';
 import { RADIUS, FONT, SPACING } from '../lib/theme';
 
 export default function ParentLoginScreen({ navigation }: any) {
@@ -27,6 +28,7 @@ export default function ParentLoginScreen({ navigation }: any) {
     const result = await verifyParentLogin(cleaned, childName.trim());
     if (!result.ok) { setError(result.error); setLoading(false); return; }
 
+    await saveParentSession({ token: result.token, phone: cleaned, students: result.students });
     navigation.navigate('ParentDashboard', { students: result.students, token: result.token, phone: cleaned });
     setLoading(false);
   }
